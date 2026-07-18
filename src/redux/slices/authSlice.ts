@@ -99,7 +99,6 @@ export const fetchCurrentUser = createAsyncThunk(
       const response = await apiClient.getMe()
       return response.data.user
     } catch (error) {
-      tokenManager.clearTokens()
       return rejectWithValue(apiClient.getErrorMessage(error))
     }
   }
@@ -136,13 +135,16 @@ interface AuthState {
   isAuthenticated: boolean
 }
 
+const persistedUser = tokenManager.getUser() as User | null
+const hasStoredSession = !!tokenManager.getToken() && tokenManager.isSessionValid()
+
 const initialState: AuthState = {
-  user: null,
+  user: persistedUser,
   token: tokenManager.getToken(),
   loading: false,
-  initializing: !!tokenManager.getToken(),
+  initializing: hasStoredSession,
   error: null,
-  isAuthenticated: false,
+  isAuthenticated: hasStoredSession,
 }
 
 const authSlice = createSlice({
@@ -169,6 +171,7 @@ const authSlice = createSlice({
         state.token = action.payload.token
         state.isAuthenticated = true
         state.initializing = false
+        tokenManager.setUser(action.payload.user)
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false
@@ -184,6 +187,7 @@ const authSlice = createSlice({
         state.token = action.payload.token
         state.isAuthenticated = true
         state.initializing = false
+        tokenManager.setUser(action.payload.user)
       })
       .addCase(clientSignup.rejected, (state, action) => {
         state.loading = false
@@ -196,14 +200,16 @@ const authSlice = createSlice({
         state.initializing = false
         state.user = action.payload
         state.isAuthenticated = true
+        tokenManager.setUser(action.payload)
       })
       .addCase(fetchCurrentUser.rejected, (state) => {
         state.initializing = false
-        if (!state.token) {
+        if (!state.token || !tokenManager.isSessionValid()) {
           state.user = null
           state.isAuthenticated = false
         } else {
           state.isAuthenticated = true
+          state.user = state.user || (tokenManager.getUser() as User | null)
         }
       })
       .addCase(updateProfile.pending, (state) => {
@@ -224,6 +230,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false
         state.error = null
         state.initializing = false
+        tokenManager.clearTokens()
       })
   },
 })

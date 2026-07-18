@@ -17,14 +17,10 @@ class TokenManager {
       return;
     }
 
-    if (!isValidToken(token)) {
-      console.error('Invalid token structure');
-      return;
-    }
-
     try {
       localStorage.setItem(ENV.TOKEN_KEY, token);
       localStorage.setItem('token', token);
+      localStorage.setItem(ENV.SESSION_EXPIRY_KEY, new Date(Date.now() + ENV.SESSION_TIMEOUT).toISOString());
       this.setupTokenRefreshTimer(token);
     } catch (error) {
       console.error('Failed to store token:', error);
@@ -60,6 +56,24 @@ class TokenManager {
     }
   }
 
+  setUser(user: unknown): void {
+    try {
+      localStorage.setItem(ENV.USER_STORAGE_KEY, JSON.stringify(user));
+    } catch (error) {
+      console.error('Failed to store user:', error);
+    }
+  }
+
+  getUser(): unknown {
+    try {
+      const storedUser = localStorage.getItem(ENV.USER_STORAGE_KEY);
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (error) {
+      console.error('Failed to retrieve user:', error);
+      return null;
+    }
+  }
+
   /**
    * Get refresh token from storage
    */
@@ -77,6 +91,21 @@ class TokenManager {
    */
   hasToken(): boolean {
     return !!this.getToken();
+  }
+
+  /**
+   * Check if the stored session is still valid for the configured session duration.
+   */
+  isSessionValid(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    const expiry = localStorage.getItem(ENV.SESSION_EXPIRY_KEY);
+    if (expiry) {
+      return new Date(expiry).getTime() > Date.now();
+    }
+
+    return isValidToken(token);
   }
 
   /**
@@ -131,6 +160,8 @@ class TokenManager {
     try {
       localStorage.removeItem(ENV.TOKEN_KEY);
       localStorage.removeItem(ENV.REFRESH_TOKEN_KEY);
+      localStorage.removeItem(ENV.SESSION_EXPIRY_KEY);
+      localStorage.removeItem(ENV.USER_STORAGE_KEY);
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
       this.clearTokenRefreshTimer();

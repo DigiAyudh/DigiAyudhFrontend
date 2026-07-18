@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Check, X, Building2, Mail, Phone, MapPin } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { fetchClients, verifyClient, rejectClient } from '../../redux/slices/clientsSlice'
+import { fetchClients, verifyClient, rejectClient, normalizeClientVerificationStatus } from '../../redux/slices/clientsSlice'
 import type { User } from '../../types'
 import { PageHeader } from '../../components/common/PageHeader'
 import { Card, CardContent } from '../../components/ui/card'
@@ -20,6 +20,8 @@ import { Textarea } from '../../components/ui/textarea'
 import { getInitials, formatDate } from '../../lib/utils'
 
 function ClientCard({ client, onVerify, onReject }: { client: User; onVerify: (c: User) => void; onReject: (c: User) => void }) {
+  const status = normalizeClientVerificationStatus(client as User & Record<string, unknown>)
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <Card>
@@ -32,7 +34,7 @@ function ClientCard({ client, onVerify, onReject }: { client: User; onVerify: (c
                 <p className="text-xs text-muted-foreground">Registered {formatDate(client.createdAt)}</p>
               </div>
             </div>
-            <StatusBadge status={client.verificationStatus || 'pending'} />
+            <StatusBadge status={status} />
           </div>
           <div className="grid gap-2 text-sm">
             <p className="flex items-center gap-2 text-muted-foreground"><Building2 className="h-4 w-4" />{client.companyName || '—'}</p>
@@ -40,7 +42,7 @@ function ClientCard({ client, onVerify, onReject }: { client: User; onVerify: (c
             <p className="flex items-center gap-2 text-muted-foreground"><Phone className="h-4 w-4" />{client.phone || '—'}</p>
             <p className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4" />{[client.city, client.country].filter(Boolean).join(', ') || '—'}</p>
           </div>
-          {client.verificationStatus === 'pending' && (
+          {status === 'pending' && (
             <div className="flex gap-2 pt-1">
               <Button variant="success" size="sm" className="flex-1" onClick={() => onVerify(client)}>
                 <Check className="h-4 w-4" /> Verify
@@ -50,7 +52,7 @@ function ClientCard({ client, onVerify, onReject }: { client: User; onVerify: (c
               </Button>
             </div>
           )}
-          {client.verificationStatus === 'rejected' && client.rejectionReason && (
+          {status === 'rejected' && client.rejectionReason && (
             <p className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">Reason: {client.rejectionReason}</p>
           )}
         </CardContent>
@@ -83,7 +85,7 @@ export default function VerificationPage() {
     setReason('')
   }
 
-  const byStatus = (status: string) => clients.filter((c) => (c.verificationStatus || 'pending') === status)
+  const byStatus = (status: 'pending' | 'verified' | 'rejected') => clients.filter((c) => normalizeClientVerificationStatus(c as User & Record<string, unknown>) === status)
   const pending = byStatus('pending')
   const verified = byStatus('verified')
   const rejected = byStatus('rejected')

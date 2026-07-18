@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FolderKanban, ListTodo, CheckCircle2, UserCheck, ArrowRight, LogIn, LogOut, Clock } from 'lucide-react'
+import { FolderKanban, ListTodo, CheckCircle2, UserCheck, ArrowRight, LogIn, LogOut, Clock, FileText, Download } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchDashboardStats } from '../../redux/slices/dashboardSlice'
 import { fetchProjects } from '../../redux/slices/projectsSlice'
+import { fetchDocuments } from '../../redux/slices/businessSlice'
 import { PageHeader } from '../../components/common/PageHeader'
 import { StatCard } from '../../components/common/StatCard'
 import { ChartCard } from '../../components/common/ChartCard'
@@ -16,7 +17,7 @@ import { Button } from '../../components/ui/button'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { Progress } from '../../components/ui/progress'
 import { Skeleton } from '../../components/ui/skeleton'
-import { projectProgress, formatDate } from '../../lib/utils'
+import { projectProgress, formatDate, formatFileSize } from '../../lib/utils'
 import apiClient from '../../services/api'
 
 const STAT_ICONS = [FolderKanban, ListTodo, CheckCircle2, UserCheck]
@@ -32,6 +33,7 @@ export default function EmployeeDashboard() {
   const dispatch = useAppDispatch()
   const { stats, loading } = useAppSelector((s) => s.dashboard)
   const { projects } = useAppSelector((s) => s.projects)
+  const { documents } = useAppSelector((s) => s.business)
   const { user } = useAppSelector((s) => s.auth)
   const [todayAttendance, setTodayAttendance] = useState<any>(null)
   const [isSubmittingAttendance, setIsSubmittingAttendance] = useState(false)
@@ -39,6 +41,7 @@ export default function EmployeeDashboard() {
   useEffect(() => {
     dispatch(fetchDashboardStats('employee'))
     dispatch(fetchProjects())
+    dispatch(fetchDocuments())
     fetchTodayAttendance()
   }, [dispatch])
 
@@ -90,6 +93,14 @@ export default function EmployeeDashboard() {
       setIsSubmittingAttendance(false)
     }
   }
+
+  // Get documents for employee's assigned projects
+  const employeeDocuments = documents.filter((doc) => {
+    const assignedProjectIds = projects
+      .filter((p) => (p.teamMembers || []).includes(user?._id || ''))
+      .map((p) => p._id)
+    return assignedProjectIds.includes(doc.projectId || '')
+  }).slice(0, 3)
 
   return (
     <div className="space-y-6">
@@ -185,6 +196,38 @@ export default function EmployeeDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Documents Section */}
+      <Card>
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Recent Documents</CardTitle>
+          <Link to="/employee/documents" className="flex items-center gap-1 text-sm text-primary hover:underline">
+            All <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {employeeDocuments.length > 0 ? (
+            employeeDocuments.map((doc) => (
+              <div key={doc._id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded bg-primary/10 text-primary">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium truncate max-w-48">{doc.name}</p>
+                    <p className="text-xs text-text-light">{formatFileSize(doc.size)} - {formatDate(doc.createdAt)}</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => window.open(doc.url, '_blank')} title="Download">
+                  <Download className="h-4 w-4" />
+                </Button>
+              </div>
+            ))
+          ) : (
+            <p className="py-4 text-center text-sm text-text-light">No documents available</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

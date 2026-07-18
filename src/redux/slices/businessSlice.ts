@@ -41,6 +41,30 @@ export const createMeeting = createAsyncThunk('business/createMeeting', async (d
   }
 })
 
+export const updateMeeting = createAsyncThunk(
+  'business/updateMeeting',
+  async ({ id, data }: { id: string; data: Record<string, unknown> }, { rejectWithValue }) => {
+    try {
+      const res = await apiClient.updateMeeting(id, data)
+      return res.data.data as Meeting
+    } catch (error) {
+      return rejectWithValue(apiClient.getErrorMessage(error))
+    }
+  }
+)
+
+export const deleteMeeting = createAsyncThunk(
+  'business/deleteMeeting',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await apiClient.deleteMeeting(id)
+      return id
+    } catch (error) {
+      return rejectWithValue(apiClient.getErrorMessage(error))
+    }
+  }
+)
+
 export const fetchDocuments = createAsyncThunk('business/documents', async (ownerId: string | undefined, { rejectWithValue }) => {
   try {
     const res = await apiClient.getDocuments(ownerId)
@@ -106,6 +130,13 @@ const businessSlice = createSlice({
       })
       .addCase(createMeeting.fulfilled, (state, action) => {
         state.meetings.unshift(action.payload)
+      })
+      .addCase(updateMeeting.fulfilled, (state, action) => {
+        const idx = state.meetings.findIndex((m) => m._id === action.payload._id)
+        if (idx !== -1) state.meetings[idx] = action.payload
+      })
+      .addCase(deleteMeeting.fulfilled, (state, action) => {
+        state.meetings = state.meetings.filter((m) => m._id !== action.payload)
       })
       .addCase(fetchDocuments.fulfilled, (state, action) => {
         state.documents = action.payload

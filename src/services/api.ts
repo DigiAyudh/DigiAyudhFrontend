@@ -42,27 +42,14 @@ class ApiClient {
   private client: AxiosInstance
 
   constructor() {
-
     this.client = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 30000,
-  withCredentials: true,
-})
-    // this.client = axios.create({
-    //   baseURL: API_BASE_URL,
-    //   headers: { 
-    //     'Content-Type': 'application/json',
-    //     'X-Content-Type-Options': 'nosniff',
-    //     'X-Frame-Options': 'DENY',
-    //     'X-XSS-Protection': '1; mode=block',
-    //     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    //   },
-    //   timeout: 30000,
-    //   withCredentials: true, // Enable CORS credentials
-    // })
+      baseURL: API_BASE_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      timeout: 30000,
+      withCredentials: true,
+    })
 
     this.client.interceptors.request.use((config) => {
       const token = tokenManager.getToken()
@@ -70,32 +57,10 @@ class ApiClient {
         config.headers.Authorization = `Bearer ${token}`
       }
       
-      // Add CSRF token if available
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
       if (csrfToken) {
         config.headers['X-CSRF-Token'] = csrfToken
       }
-      
-
-
-
-
-
-
-
-
-      // Add request ID for tracing
-      // config.headers['X-Request-ID'] = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-      
-
-
-
-
-
-
-
-
-
 
       return config
     })
@@ -129,10 +94,7 @@ class ApiClient {
             originalRequest.headers.Authorization = `Bearer ${token}`
             return this.client(originalRequest)
           } catch {
-            tokenManager.clearTokens()
-            if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/signup')) {
-              window.location.href = '/login'
-            }
+            window.dispatchEvent(new CustomEvent('auth:session-expired'))
           }
         }
 
@@ -157,9 +119,6 @@ class ApiClient {
     return 'An unexpected error occurred'
   }
 
-
-
-  
   sendEmailOtp(email: string) {
     return this.client.post("/auth/send-email-otp", { email })
   }
@@ -234,8 +193,11 @@ class ApiClient {
   }
 
   // Clients & verification
-  getClients() {
-    return this.client.get('/users/clients')
+  getClients(company?: string) {
+    const fallbackCompany = company || 'digiayudh'
+    return this.client.get('/users/clients').catch(async () => {
+      return this.client.get(`/users?company=${encodeURIComponent(fallbackCompany)}`)
+    })
   }
   verifyClient(clientId: string) {
     return this.client.post(`/users/clients/${clientId}/verify`)
@@ -388,8 +350,25 @@ class ApiClient {
   }
 
   // Documents
-  getDocuments(ownerId?: string) {
-    return this.client.get(ownerId ? `/documents?ownerId=${ownerId}` : '/documents')
+  getDocuments(ownerId?: string, projectId?: string) {
+    const params = new URLSearchParams()
+    if (ownerId) params.append('ownerId', ownerId)
+    if (projectId) params.append('projectId', projectId)
+    return this.client.get(`/documents?${params.toString()}`)
+  }
+  uploadDocument(formData: FormData) {
+    return this.client.post('/documents', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  }
+  downloadDocument(id: string) {
+    return this.client.get(`/documents/${id}/download`, { responseType: 'blob' })
+  }
+  viewDocument(id: string) {
+    return this.client.get(`/documents/${id}`, { responseType: 'blob' })
+  }
+  deleteDocument(id: string) {
+    return this.client.delete(`/documents/${id}`)
   }
 
   // Support tickets

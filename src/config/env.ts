@@ -15,6 +15,8 @@ export const ENV = {
   // Token Configuration
   TOKEN_KEY: 'auth_token',
   REFRESH_TOKEN_KEY: 'refresh_token',
+  SESSION_EXPIRY_KEY: 'auth_session_expires_at',
+  USER_STORAGE_KEY: 'auth_user',
   TOKEN_EXPIRY_CHECK_INTERVAL: 60000, // Check every 1 minute
   TOKEN_REFRESH_THRESHOLD: 24 * 60 * 60 * 1000, // 1 day before expiry
   

@@ -9,6 +9,7 @@ import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { APP_CONFIG } from '../../config/navigation';
 import { navLinks } from '@/constants/landing.data';
 import { cn } from '@/lib/utils';
+import { tokenManager } from '@/utils/tokenManager';
 
 export function PublicNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,8 +19,9 @@ export function PublicNavbar() {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const getDashboardPath = () => {
-    if (!user) return '/login';
-    switch (user.role) {
+    const role = user?.role || tokenManager.getUserRoleFromToken();
+    if (!role) return '/login';
+    switch (role) {
       case 'admin':
         return '/admin';
       case 'employee':

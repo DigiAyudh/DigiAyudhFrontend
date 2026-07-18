@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, ArrowUpRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { APP_CONFIG } from '@/config/navigation';
 import { useAuth } from '@/contexts/auth.context';
 import type { ApiError } from '@/types';
+import { tokenManager } from '@/utils/tokenManager';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -23,7 +24,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, isAuthenticated, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -37,6 +38,18 @@ export default function LoginPage() {
   });
 
   const remember = watch('remember');
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const role = user?.role || tokenManager.getUserRoleFromToken();
+      const dashboardRoutes: Record<string, string> = {
+        admin: '/admin',
+        employee: '/employee',
+        client: '/client',
+      };
+      navigate(dashboardRoutes[role || 'client'] || '/client', { replace: true });
+    }
+  }, [isAuthenticated, navigate, user]);
 
   // const onSubmit = async (data: LoginFormData) => {
   //   try {

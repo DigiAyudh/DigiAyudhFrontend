@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, UserCheck, FolderKanban, DollarSign, ArrowRight, Clock } from 'lucide-react'
+import { Users, UserCheck, FolderKanban, DollarSign, ArrowRight, Clock, FileText, Download } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -10,6 +10,7 @@ import { fetchDashboardStats } from '../../redux/slices/dashboardSlice'
 import { fetchProjects } from '../../redux/slices/projectsSlice'
 import { fetchContactRequests } from '../../redux/slices/contactSlice'
 import { fetchClients } from '../../redux/slices/clientsSlice'
+import { fetchDocuments } from '../../redux/slices/businessSlice'
 import { PageHeader } from '../../components/common/PageHeader'
 import { StatCard } from '../../components/common/StatCard'
 import { ChartCard } from '../../components/common/ChartCard'
@@ -17,6 +18,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { Skeleton } from '../../components/ui/skeleton'
 import { formatRelativeTime } from '../../utils/helpers'
+import { formatFileSize, formatDate } from '../../lib/utils'
 
 const STAT_ICONS = [Users, UserCheck, FolderKanban, DollarSign]
 
@@ -37,12 +39,14 @@ export default function AdminDashboard() {
   const { projects } = useAppSelector((s) => s.projects)
   const { requests } = useAppSelector((s) => s.contact)
   const { clients } = useAppSelector((s) => s.clients)
+  const { documents } = useAppSelector((s) => s.business)
 
   useEffect(() => {
     dispatch(fetchDashboardStats('admin'))
     dispatch(fetchProjects())
     dispatch(fetchContactRequests())
     dispatch(fetchClients())
+    dispatch(fetchDocuments())
   }, [dispatch])
 
   const statusCounts = projects.reduce<Record<string, number>>((acc, p) => {
@@ -52,6 +56,7 @@ export default function AdminDashboard() {
   const pieData = Object.entries(statusCounts).map(([name, value]) => ({ name, value }))
   const pendingClients = clients.filter((c) => c.verificationStatus === 'pending')
   const newRequests = requests.filter((r) => r.status === 'new')
+  const recentDocuments = documents.slice(0, 3)
 
   return (
     <div className="space-y-6">
@@ -77,10 +82,10 @@ export default function AdminDashboard() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
               <XAxis dataKey="month" stroke="hsl(var(--text-light))" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="hsl(var(--text-light))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v / 1000}k`} />
+              <YAxis stroke="hsl(var(--text-light))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => "$" + (v as number / 1000) + "k"} />
               <Tooltip
                 contentStyle={{ background: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))', borderRadius: 8, color: 'hsl(var(--text))' }}
-                formatter={(v) => [`$${Number(v ?? 0).toLocaleString()}`, 'Revenue']}
+                formatter={(v) => ["$" + Number(v ?? 0).toLocaleString(), 'Revenue']}
               />
               <Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#rev)" />
             </AreaChart>
@@ -149,6 +154,42 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Documents Section */}
+      <Card>
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Recent Documents</CardTitle>
+          <Link to="/admin/documents" className="flex items-center gap-1 text-sm text-primary hover:underline">
+            All <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {recentDocuments.length > 0 ? (
+            recentDocuments.map((doc) => (
+              <div key={doc._id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium truncate max-w-48">{doc.name}</p>
+                    <p className="text-xs text-text-light">{formatFileSize(doc.size)} - {formatDate(doc.createdAt)}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => window.open(doc.url, '_blank')}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors"
+                  title="Download"
+                >
+                  <Download className="h-4 w-4" />
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="py-4 text-center text-sm text-text-light">No documents available</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

@@ -387,17 +387,17 @@ export const invoices: Invoice[] = [
 
 /* Meetings ----------------------------------------------------------- */
 export const meetings: Meeting[] = [
-  { _id: "mt_1", title: "Sprint Review", description: "Demo of checkout flow", start: daysFromNow(1), end: daysFromNow(1), attendees: ["u_emp_1", "u_client_1"], organizerId: "u_emp_1", clientId: "u_client_1", link: "https://meet.example.com/abc", status: "scheduled", createdAt: daysAgo(2) },
-  { _id: "mt_2", title: "Design Handoff", description: "Walk through the new design system", start: daysFromNow(3), end: daysFromNow(3), attendees: ["u_emp_3", "u_client_1"], organizerId: "u_emp_3", clientId: "u_client_1", link: "https://meet.example.com/def", status: "scheduled", createdAt: daysAgo(1) },
-  { _id: "mt_3", title: "Kickoff Call", description: "Project kickoff", start: daysAgo(30), end: daysAgo(30), attendees: ["u_emp_1", "u_client_1"], organizerId: "u_emp_1", clientId: "u_client_1", status: "completed", createdAt: daysAgo(32) },
+  { _id: "mt_1", title: "Sprint Review", description: "Demo of checkout flow", start: daysFromNow(1), end: daysFromNow(1), attendees: ["u_emp_1", "u_client_1"], organizerId: "u_emp_1", clientId: "u_client_1", link: "https://meet.example.com/abc", status: "scheduled", type: "client", createdAt: daysAgo(2) },
+  { _id: "mt_2", title: "Design Handoff", description: "Walk through the new design system", start: daysFromNow(3), end: daysFromNow(3), attendees: ["u_emp_3", "u_client_1"], organizerId: "u_emp_3", clientId: "u_client_1", link: "https://meet.example.com/def", status: "scheduled", type: "client", createdAt: daysAgo(1) },
+  { _id: "mt_3", title: "Kickoff Call", description: "Project kickoff", start: daysAgo(30), end: daysAgo(30), attendees: ["u_emp_1", "u_client_1"], organizerId: "u_emp_1", clientId: "u_client_1", status: "completed", type: "client", createdAt: daysAgo(32) },
 ]
 
 /* Documents ---------------------------------------------------------- */
 export const documents: DocumentFile[] = [
-  { _id: "d_1", name: "Master Services Agreement.pdf", type: "pdf", size: 248000, category: "contract", ownerId: "u_client_1", url: "#", createdAt: daysAgo(120) },
-  { _id: "d_2", name: "Acme Platform SOW.pdf", type: "pdf", size: 180000, category: "contract", ownerId: "u_client_1", projectId: "p_1", url: "#", createdAt: daysAgo(90) },
-  { _id: "d_3", name: "Brand Guidelines.pdf", type: "pdf", size: 5400000, category: "asset", ownerId: "u_client_1", projectId: "p_3", url: "#", createdAt: daysAgo(20) },
-  { _id: "d_4", name: "Q2 Progress Report.docx", type: "docx", size: 96000, category: "report", ownerId: "u_client_1", url: "#", createdAt: daysAgo(15) },
+  { _id: "d_1", name: "Master Services Agreement.pdf", type: "pdf", size: 248000, category: "contract", ownerId: "u_client_1", uploadedBy: "client@example.com", url: "#", createdAt: daysAgo(120) },
+  { _id: "d_2", name: "Acme Platform SOW.pdf", type: "pdf", size: 180000, category: "contract", ownerId: "u_client_1", projectId: "p_1", uploadedBy: "client@example.com", url: "#", createdAt: daysAgo(90) },
+  { _id: "d_3", name: "Brand Guidelines.pdf", type: "pdf", size: 5400000, category: "asset", ownerId: "u_client_1", projectId: "p_3", uploadedBy: "client@example.com", url: "#", createdAt: daysAgo(20) },
+  { _id: "d_4", name: "Q2 Progress Report.docx", type: "docx", size: 96000, category: "report", ownerId: "u_client_1", uploadedBy: "client@example.com", url: "#", createdAt: daysAgo(15) },
 ]
 
 /* Support tickets ---------------------------------------------------- */

@@ -1,13 +1,50 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import apiClient from '../../services/api'
-import { Employee } from '../../types'
+import { Employee, User } from '../../types'
+
+// Normalize API response to Employee type - API may return User objects
+function normalizeEmployee(data: unknown): Employee {
+  const item = data as Partial<User> & Record<string, unknown>
+  const getDate = (val: unknown): Date => {
+    if (!val) return new Date()
+    if (val instanceof Date) return val
+    if (typeof val === 'string' || typeof val === 'number') return new Date(val)
+    return new Date()
+  }
+  return {
+    _id: String(item._id || item.userId || ''),
+    userId: String(item.userId || item._id || ''),
+    name: String(item.name || ''),
+    email: String(item.email || ''),
+    position: String(item.position || ''),
+    department: String(item.department || ''),
+    salary: item.salary as number | undefined,
+    joiningDate: getDate(item.joiningDate),
+    phone: String(item.phone || ''),
+    address: String(item.address || ''),
+    city: String(item.city || ''),
+    country: String(item.country || ''),
+    emergencyContact: item.emergencyContact ? String(item.emergencyContact) : undefined,
+    emergencyPhone: item.emergencyPhone ? String(item.emergencyPhone) : undefined,
+    isActive: Boolean(item.isActive ?? true),
+    company: String(item.company || 'digiayudh'),
+    createdAt: getDate(item.createdAt),
+    updatedAt: getDate(item.updatedAt),
+  }
+}
 
 export const fetchEmployees = createAsyncThunk(
   'employees/fetchEmployees',
   async (company: string, { rejectWithValue }) => {
     try {
       const response = await apiClient.getEmployees(company)
-      return response.data.data
+      const payload = response.data?.data ?? response.data?.employees ?? response.data
+      
+      if (Array.isArray(payload)) {
+        return payload.map(normalizeEmployee)
+      }
+      
+      return [] as Employee[]
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message)
     }
@@ -19,7 +56,7 @@ export const createEmployee = createAsyncThunk(
   async (data: any, { rejectWithValue }) => {
     try {
       const response = await apiClient.createEmployee(data)
-      return response.data.data
+      return normalizeEmployee(response.data.data)
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message)
     }
@@ -31,7 +68,7 @@ export const updateEmployee = createAsyncThunk(
   async ({ id, data }: { id: string; data: any }, { rejectWithValue }) => {
     try {
       const response = await apiClient.updateEmployee(id, data)
-      return response.data.data
+      return normalizeEmployee(response.data.data)
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message)
     }

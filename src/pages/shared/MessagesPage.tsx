@@ -54,7 +54,7 @@ export default function MessagesPage() {
       <Card className="grid h-[calc(100vh-14rem)] grid-cols-1 overflow-hidden md:grid-cols-[280px_1fr]">
         {/* Chat list */}
         <div className="border-r border-border">
-          <div className="border-b border-border p-3">
+          <div className=" border-border p-3">
             <p className="text-sm font-semibold">Conversations</p>
           </div>
           <div className="overflow-y-auto">
@@ -63,7 +63,7 @@ export default function MessagesPage() {
                 key={c._id}
                 onClick={() => dispatch(setActiveChat(c._id))}
                 className={cn(
-                  'flex w-full items-center gap-3 border-b border-border p-3 text-left transition-colors hover:bg-muted/50',
+                  'flex w-full items-center gap-3  border-border p-3 text-left transition-colors hover:bg-muted/50',
                   activeChat === c._id && 'bg-muted'
                 )}
               >

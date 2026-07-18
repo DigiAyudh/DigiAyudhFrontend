@@ -505,7 +505,7 @@ export const mockApi = {
       start: data.start ? new Date(data.start) : now, end: data.end ? new Date(data.end) : now,
       attendees: data.attendees ?? [], organizerId: currentUserId() ?? "u_emp_1",
       clientId: data.clientId, location: data.location, link: data.link,
-      status: "scheduled", createdAt: now,
+      status: "scheduled", type: data.type ?? "team", createdAt: now,
     }
     db.meetings.unshift(meeting)
     log("created", "Meeting", meeting._id, data.title)

@@ -23,14 +23,14 @@ function AuthInitializerContent({ children }: AuthInitializerProps) {
 
     if (token) {
       initAttemptedRef.current = true
-      if (tokenManager.isTokenValid()) {
+      if (tokenManager.isSessionValid()) {
         dispatch(fetchCurrentUser())
         // Safety timeout: if init doesn't complete in 3 seconds, consider it done anyway
         timeoutRef.current = setTimeout(() => {
           console.log('[v0] Auth initialization timeout - forcing completion')
         }, 3000)
       } else {
-        // Invalid token, clear it
+        // Invalid or expired session, clear it
         tokenManager.clearTokens()
       }
     } else {

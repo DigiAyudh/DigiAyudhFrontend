@@ -32,7 +32,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 bg-background/80 px-4 backdrop-blur lg:px-6">
       <button className="text-text-muted lg:hidden" onClick={onMenuClick} aria-label="Open menu">
         <Menu className="h-5 w-5" />
       </button>

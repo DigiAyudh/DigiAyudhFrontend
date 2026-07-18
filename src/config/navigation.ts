@@ -63,6 +63,7 @@ const adminNav: NavSection[] = [
     items: [
       { label: 'Contact Requests', to: '/admin/contact-requests', icon: Inbox, badgeKey: 'contactRequests' },
       { label: 'Invoices', to: '/admin/invoices', icon: Receipt },
+      { label: 'Documents', to: '/admin/documents', icon: FileText },
       { label: 'Audit Logs', to: '/admin/audit-logs', icon: ClipboardList },
     ],
   },
@@ -153,13 +154,6 @@ export const navByRole: Record<UserRole, NavSection[]> = {
   client: clientNav,
 }
 
-
-
-
-
-
-
-
 export const APP_CONFIG = {
   name: 'DigiAyudh',
   tagline: 'Digital Weapons for the Future',
@@ -168,21 +162,21 @@ export const APP_CONFIG = {
   url: 'https://digiayudh.com',
   supportEmail: 'hello@digiayudh.com',
   phone: '+91 98765 43210',
-} as const;
+} as const
 
 export const API_CONFIG = {
   baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1',
   timeout: 30000,
   retryAttempts: 3,
   retryDelay: 1000,
-} as const;
+} as const
 
 export const AUTH_CONFIG = {
   tokenKey: 'digiayudh_access_token',
   refreshTokenKey: 'digiayudh_refresh_token',
   userKey: 'digiayudh_user',
   tokenExpiryKey: 'digiayudh_token_expiry',
-} as const;
+} as const
 
 export const ROUTES = {
   public: {
@@ -217,4 +211,4 @@ export const ROUTES = {
     tenants: '/super-admin/tenants',
     settings: '/super-admin/settings',
   },
-} as const;
+} as const

@@ -7,6 +7,7 @@ import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchProjects } from '../../redux/slices/projectsSlice'
+import { fetchClients } from '../../redux/slices/clientsSlice'
 import { PageHeader } from '../../components/common/PageHeader'
 import { Card, CardContent } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
@@ -44,6 +45,7 @@ const projectSchema = z.object({
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().optional(),
   budget: z.string().optional(),
+  clientId: z.string().optional(),
 })
 
 type ProjectFormData = z.infer<typeof projectSchema>
@@ -57,6 +59,7 @@ export default function ProjectsPage({ basePath }: Props) {
   const navigate = useNavigate()
   const { projects, loading } = useAppSelector((s) => s.projects)
   const { user } = useAppSelector((s) => s.auth)
+  const { clients, loading: clientsLoading } = useAppSelector((s) => s.clients)
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -67,21 +70,24 @@ export default function ProjectsPage({ basePath }: Props) {
     handleSubmit,
     reset,
     formState: { errors },
-    watch,
-    setValue,
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
       status: 'planning',
       priority: 'medium',
+      clientId: '',
     },
   })
 
-  const canEdit = user?.role === 'admin' || user?.role === 'client'
+  const canManageProjects = user?.role === 'admin'
+  const clientOptions = clients.filter((client) => client.role?.toLowerCase() === 'client')
 
   useEffect(() => {
     dispatch(fetchProjects())
-  }, [dispatch])
+    if (user?.role === 'admin') {
+      dispatch(fetchClients(user.company || 'digiayudh'))
+    }
+  }, [dispatch, user?.role, user?.company])
 
   const onSubmit = async (data: ProjectFormData) => {
     setIsSubmitting(true)
@@ -99,17 +105,15 @@ export default function ProjectsPage({ basePath }: Props) {
       //   company: 'digiayudh',
       //}
       const projectData = {
-  title: data.title,
-  description: data.description,
-  status: data.status,
-  priority: data.priority,
-  startDate: new Date(data.startDate),
-  endDate: data.endDate ? new Date(data.endDate) : undefined,
-  budget: data.budget ? Number(data.budget) : undefined,
-  
-  // sirf admin/employee ke liye - kis client ke liye project hai
-  clientId: user?.role !== 'client' ? user._id : undefined,
-}
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        priority: data.priority,
+        startDate: new Date(data.startDate),
+        endDate: data.endDate ? new Date(data.endDate) : undefined,
+        budget: data.budget ? Number(data.budget) : undefined,
+        clientId: data.clientId || undefined,
+      }
 
       console.log('Project submit payload:', projectData)
 
@@ -145,6 +149,7 @@ export default function ProjectsPage({ basePath }: Props) {
       startDate: project.startDate?.toString().split('T')[0],
       endDate: project.endDate?.toString().split('T')[0],
       budget: project.budget?.toString(),
+      clientId: project.clientId ?? '',
     })
     setIsOpen(true)
   }
@@ -170,7 +175,7 @@ export default function ProjectsPage({ basePath }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <PageHeader title="Projects" subtitle="Browse and track all projects." />
-        {canEdit && (
+        {canManageProjects && (
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button
@@ -271,6 +276,27 @@ export default function ProjectsPage({ basePath }: Props) {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="clientId">Assign Client</Label>
+                  <select
+                    id="clientId"
+                    {...register('clientId')}
+                    className="w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
+                  >
+                    <option value="">Select client</option>
+                    {clientOptions.map((client) => (
+                      <option key={client._id} value={client._id}>
+                        {client.name}
+                        {client.companyName ? ` - ${client.companyName}` : ''}
+                      </option>
+                    ))}
+                  </select>
+                  {clientsLoading && <p className="text-xs text-text-light">Loading clients...</p>}
+                  {!clientsLoading && clientOptions.length === 0 && (
+                    <p className="text-xs text-text-light">No clients available yet.</p>
+                  )}
+                </div>
+
                 <div className="flex gap-3 justify-end pt-4">
                   <Button
                     type="button"
@@ -335,7 +361,7 @@ export default function ProjectsPage({ basePath }: Props) {
                     {p.budget ? <span className="font-medium text-text">{formatCurrency(p.budget)}</span> : null}
                   </div>
                 </div>
-                {canEdit && (
+                {canManageProjects && (
                   <div className="flex gap-2 pt-2 border-t border-border">
                     <Button
                       size="sm"

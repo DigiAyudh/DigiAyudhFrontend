@@ -17,7 +17,6 @@ export interface User {
   city?: string
   state?: string
   country?: string
-  /** Clients require admin verification before full access */
   verificationStatus?: VerificationStatus
   rejectionReason?: string
   assignedEmployeeId?: string
@@ -63,10 +62,13 @@ export interface Meeting {
   end: Date
   attendees: string[]
   organizerId: string
+  organizerName?: string
   clientId?: string
+  clientIds?: string[]
   location?: string
   link?: string
   status: 'scheduled' | 'completed' | 'cancelled'
+  type: 'team' | 'client'
   createdAt: Date
 }
 
@@ -78,6 +80,10 @@ export interface DocumentFile {
   category: 'contract' | 'invoice' | 'report' | 'asset' | 'other'
   ownerId: string
   projectId?: string
+  projectName?: string
+  ownerName?: string
+  ownerType?: 'employee' | 'client'
+  uploadedBy: string | User
   url: string
   createdAt: Date
 }
@@ -261,7 +267,7 @@ export interface Report {
   _id: string
   title: string
   type: 'projects' | 'employees' | 'tasks' | 'finances' | 'leads'
-  filters: Record<string, any>
+  filters: Record<string, unknown>
   createdBy: string
   company: string
   createdAt: Date
