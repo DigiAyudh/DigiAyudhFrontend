@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { APP_CONFIG } from '../../config/navigation';
 import { navLinks } from '@/constants/landing.data';
+import { Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { tokenManager } from '@/utils/tokenManager';
 
@@ -66,6 +67,13 @@ export function PublicNavbar() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
+          <Link
+            to="/portfolio"
+            className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <Briefcase className="h-3.5 w-3.5" />
+            Portfolio
+          </Link>
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -113,6 +121,14 @@ export function PublicNavbar() {
             className="border-b border-border bg-background md:hidden"
           >
             <nav className="flex flex-col gap-1 px-4 py-4">
+              <Link
+                to="/portfolio"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                <Briefcase className="h-3.5 w-3.5" />
+                Portfolio
+              </Link>
               {navLinks.map((link) => (
                 <a
                   key={link.href}

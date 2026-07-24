@@ -9,6 +9,8 @@ import DashboardLayout from './layouts/DashboardLayout'
 
 // Public pages
 import LandingPage from './pages/LandingPage'
+import PortfolioListingPage from './pages/PortfolioListingPage'
+import PortfolioProjectDetail from './pages/PortfolioProjectDetail'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
@@ -32,6 +34,7 @@ import AdminTasksPage from './pages/admin/AdminTasksPage'
 import AdminAttendancePage from './pages/admin/AttendancePage'
 import AdminLeaveRequestsPage from './pages/admin/LeaveRequestsPage'
 import CertificatesPage from './pages/admin/CertificatesPage'
+import AdminPortfolioPage from './pages/admin/AdminPortfolioPage'
 import InternalDocumentationPage from './pages/shared/InternalDocumentationPage'
 
 // Employee pages
@@ -73,6 +76,8 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/verify/cert/:token" element={<PublicCertificateVerification />} />
+              <Route path="/portfolio" element={<PortfolioListingPage />} />
+              <Route path="/portfolio/:id" element={<PortfolioProjectDetail />} />
 
               {/* Admin Dashboard */}
               <Route
@@ -95,6 +100,7 @@ function App() {
                 <Route path="attendance" element={<AdminAttendancePage />} />
                 <Route path="leave-requests" element={<AdminLeaveRequestsPage />} />
                 <Route path="contact-requests" element={<ContactRequestsPage />} />
+                <Route path="portfolio" element={<AdminPortfolioPage />} />
                 <Route path="invoices" element={<InvoicesPage />} />
                 <Route path="audit-logs" element={<AuditLogsPage />} />
                 <Route path="certificates" element={<CertificatesPage />} />

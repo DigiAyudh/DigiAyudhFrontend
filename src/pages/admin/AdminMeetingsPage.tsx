@@ -80,8 +80,8 @@ export default function AdminMeetingsPage() {
   const meetingType = watch('type')
 
   useEffect(() => {
-    dispatch(fetchEmployees('digiayudh'))
-    dispatch(fetchClients('digiayudh'))
+    dispatch(fetchEmployees(('digiayudh')))
+dispatch(fetchClients(user?.companyName))
     dispatch(fetchMeetings())
   }, [dispatch])
 
@@ -131,13 +131,13 @@ export default function AdminMeetingsPage() {
     setEditingId(meeting._id)
     const startDate = new Date(meeting.start)
     const endDate = new Date(meeting.end)
-    
+
     if (meeting.type === 'team') {
       setSelectedEmployees(meeting.attendees || [])
     } else {
       setSelectedClients(meeting.clientIds || [])
     }
-    
+
     reset({
       title: meeting.title,
       description: meeting.description,
@@ -164,10 +164,10 @@ export default function AdminMeetingsPage() {
     }
   }
 
-  const handleSelectAllEmployees = () => {
-    const allIds = employees.map((e) => e._id)
-    setSelectedEmployees(allIds)
-  }
+ const handleSelectAllEmployees = () => {
+  const allIds = employees.filter((e) => e.isActive).map((e) => e._id)
+  setSelectedEmployees(allIds)
+}
 
   const handleEmployeeToggle = (id: string) => {
     setSelectedEmployees((prev) =>
@@ -323,7 +323,11 @@ export default function AdminMeetingsPage() {
                 <div className="space-y-2">
                   <Label>Select Clients</Label>
                   <div className="max-h-40 overflow-y-auto border rounded-lg p-2 space-y-2">
+
+                    {/* {clients.filter((c) => c).map((client) => ( */}
+
                     {clients.filter((c) => c.verificationStatus === 'verified').map((client) => (
+
                       <div key={client._id} className="flex items-center space-x-2">
                         <Checkbox
                           id={`client-${client._id}`}
@@ -438,7 +442,7 @@ export default function AdminMeetingsPage() {
                   <StatusBadge status={showDetails.status} />
                 </div>
               </div>
-              
+
               {showDetails.description && (
                 <div>
                   <p className="text-xs text-text-light">Description</p>

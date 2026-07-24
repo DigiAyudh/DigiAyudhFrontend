@@ -222,20 +222,20 @@ class ApiClient {
 
   // Projects
   getProjects(company: string) {
-    return this.client.get(`/projects?company=${company}`)
-  }
-  createProject(data: Record<string, unknown>) {
-    return this.client.post('/projects/create-project', data)
-  }
-  getProjectById(id: string) {
-    return this.client.get(`/projects/${id}`)
-  }
-  updateProject(id: string, data: Record<string, unknown>) {
-    return this.client.put(`/projects/${id}`, data)
-  }
-  deleteProject(id: string) {
-    return this.client.delete(`/projects/${id}`)
-  }
+  return this.client.get(`/projects?company=${company}`)
+}
+createProject(data: Record<string, unknown>) {
+  return this.client.post('/projects/create-project', data)
+}
+getProjectById(id: string) {
+  return this.client.get(`/projects/${id}`)
+}
+updateProject(id: string, data: Record<string, unknown>) {
+  return this.client.put(`/projects/${id}`, data)
+}
+deleteProject(id: string) {
+  return this.client.delete(`/projects/${id}`)
+}
 
   // Tasks
   getTasks(company: string, projectId?: string) {
@@ -258,8 +258,9 @@ class ApiClient {
   }
 
   // Employees (HR records)
-  getEmployees(company: string) {
-    return this.client.get(`/employees?company=${company}`)
+  getEmployees(company?: string) {
+    const fallbackCompany = company || 'digiayudh'
+    return this.client.get(`/employees?company=${encodeURIComponent(fallbackCompany)}`)
   }
   createEmployee(data: Record<string, unknown>) {
     return this.client.post('/employees', data)

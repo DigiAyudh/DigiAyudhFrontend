@@ -35,9 +35,12 @@ function normalizeEmployee(data: unknown): Employee {
 
 export const fetchEmployees = createAsyncThunk(
   'employees/fetchEmployees',
-  async (company: string, { rejectWithValue }) => {
+  async (company: string | undefined, { rejectWithValue }) => {
     try {
       const response = await apiClient.getEmployees(company)
+      if (!company) {
+        return [] as Employee[]
+      }
       const payload = response.data?.data ?? response.data?.employees ?? response.data
       
       if (Array.isArray(payload)) {

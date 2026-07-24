@@ -52,6 +52,7 @@ const adminNav: NavSection[] = [
       { label: 'Admins', to: '/admin/admins', icon: UserCog },
       { label: 'Clients', to: '/admin/clients', icon: UserCheck },
       { label: 'Verification', to: '/admin/verification', icon: ShieldCheck, badgeKey: 'pendingClients' },
+      { label: 'Portfolio', to: '/admin/portfolio', icon: FolderKanban },
       { label: 'Projects', to: '/admin/projects', icon: FolderKanban },
       { label: 'Tasks', to: '/admin/tasks', icon: ListChecks },
       { label: 'Attendance', to: '/admin/attendance', icon: Calendar },

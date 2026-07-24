@@ -19,10 +19,10 @@ export default function HomePage() {
         <HeroSection />
         <TrustedBySection />
         <ServicesSection />
-        <WhyUsSection />
-        <ProcessSection />
         <PortfolioSection />
         {/* <PricingSection /> */}
+        <WhyUsSection />
+        <ProcessSection />
         <TestimonialSection />
         <FAQSection />
         <ContactSection />
