@@ -2,8 +2,8 @@ import { trustedClients } from '@/constants/landing.data';
 
 export function TrustedBySection() {
   return (
-    <section className="border-y border-border/50 py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="border-y border-border/50 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
         <p className="mb-8 text-center text-sm text-muted-foreground">
           Trusted by ambitious teams across industries
         </p>

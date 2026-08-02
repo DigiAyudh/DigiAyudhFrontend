@@ -54,7 +54,7 @@ export function AuthLayout({
       </div>
 
       {/* Form panel */}
-      <div className="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-16">
+      <div className="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-8 lg:py-0">
         <div className="mx-auto w-full max-w-md">
           <Link to="/" className="mb-8 flex items-center gap-2 lg:hidden">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">

@@ -275,8 +275,8 @@ export function PortfolioSection() {
   };
 
   if (featuredLoading) return (
-    <section id="work" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="work" className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-7xl">
         <SectionHeader badge="Selected work" title="Products we&apos;re proud of." description="Real solutions, designed around real business goals." />
         <div className="mt-16 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-purple-400" /></div>
       </div>
@@ -289,8 +289,8 @@ export function PortfolioSection() {
 
   return (
     <>
-      <section id="work" className="py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="work" className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl">
           <SectionHeader badge="Selected work" title="Products we&apos;re proud of." description="Real solutions, designed around real business goals." />
           <div className="mt-16 flex flex-col gap-6 lg:gap-8">
             {featured && (

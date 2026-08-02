@@ -5,8 +5,8 @@ import { stats, whyUsPoints } from '@/constants/landing.data';
 
 export function WhyUsSection() {
   return (
-    <section className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-7xl">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           <div>
             <SectionHeader

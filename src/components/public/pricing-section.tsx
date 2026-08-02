@@ -8,8 +8,8 @@ import { cn } from '@/lib/utils';
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="border-y border-border/50 py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="border-y border-border/50 px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-7xl">
         <SectionHeader
           badge="Simple pricing"
           title="Start lean. Scale when ready."

@@ -3,8 +3,8 @@ import { testimonial } from '@/constants/landing.data';
 
 export function TestimonialSection() {
   return (
-    <section className="py-24 lg:py-32">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-4xl">
         <motion.blockquote
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

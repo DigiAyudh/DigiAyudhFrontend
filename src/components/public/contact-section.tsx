@@ -63,8 +63,8 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-7xl">
 
         <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
 
