@@ -14,11 +14,11 @@ const avatars = [
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-32">
+    <section className="relative overflow-hidden px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
       <div className="pointer-events-none absolute inset-0 bg-grid" />
       <div className="pointer-events-none absolute -top-40 left-1/2 size-[600px] -translate-x-1/2 rounded-full bg-purple-600/10 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl">
         <div className="mb-6 flex justify-center">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
