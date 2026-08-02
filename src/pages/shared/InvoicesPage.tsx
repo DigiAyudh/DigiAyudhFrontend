@@ -93,7 +93,7 @@ export default function InvoicesPage() {
   const overdue = invoices.filter((i) => i.status === 'overdue').reduce((sum, i) => sum + i.total, 0)
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="flex items-center justify-between">
         <PageHeader title="Invoices" subtitle="Billing history and payment status." />
         {isAdmin && (
@@ -114,45 +114,45 @@ export default function InvoicesPage() {
                   {editingId ? 'Update invoice details' : 'Create a new invoice for a client'}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="number">Invoice Number *</Label>
-                    <Input {...register('number')} placeholder="INV-001" />
-                    {errors.number && <p className="text-xs text-destructive">{errors.number.message}</p>}
+                    <Input {...register('number')} placeholder="INV-001" className="mt-1.5" />
+                    {errors.number && <p className="mt-1 text-xs text-destructive">{errors.number.message}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="clientName">Client Name *</Label>
-                    <Input {...register('clientName')} placeholder="Client name" />
-                    {errors.clientName && <p className="text-xs text-destructive">{errors.clientName.message}</p>}
+                    <Input {...register('clientName')} placeholder="Client name" className="mt-1.5" />
+                    {errors.clientName && <p className="mt-1 text-xs text-destructive">{errors.clientName.message}</p>}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div>
                     <Label htmlFor="amount">Amount *</Label>
-                    <Input type="number" {...register('amount')} placeholder="0.00" step="0.01" />
-                    {errors.amount && <p className="text-xs text-destructive">{errors.amount.message}</p>}
+                    <Input type="number" {...register('amount')} placeholder="0.00" step="0.01" className="mt-1.5" />
+                    {errors.amount && <p className="mt-1 text-xs text-destructive">{errors.amount.message}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="tax">Tax</Label>
-                    <Input type="number" {...register('tax')} placeholder="0.00" step="0.01" />
+                    <Input type="number" {...register('tax')} placeholder="0.00" step="0.01" className="mt-1.5" />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div>
                     <Label htmlFor="issueDate">Issue Date *</Label>
-                    <Input type="date" {...register('issueDate')} />
-                    {errors.issueDate && <p className="text-xs text-destructive">{errors.issueDate.message}</p>}
+                    <Input type="date" {...register('issueDate')} className="mt-1.5" />
+                    {errors.issueDate && <p className="mt-1 text-xs text-destructive">{errors.issueDate.message}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="dueDate">Due Date *</Label>
-                    <Input type="date" {...register('dueDate')} />
-                    {errors.dueDate && <p className="text-xs text-destructive">{errors.dueDate.message}</p>}
+                    <Input type="date" {...register('dueDate')} className="mt-1.5" />
+                    {errors.dueDate && <p className="mt-1 text-xs text-destructive">{errors.dueDate.message}</p>}
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="mt-4">
                   <Label htmlFor="status">Status</Label>
-                  <select {...register('status')} className="w-full h-10 px-3 py-2 border border-border rounded-md bg-background">
+                  <select {...register('status')} className="mt-1.5 w-full h-10 px-3 py-2 border border-border rounded-md bg-background">
                     <option value="draft">Draft</option>
                     <option value="sent">Sent</option>
                     <option value="paid">Paid</option>
@@ -173,43 +173,45 @@ export default function InvoicesPage() {
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="mt-5 grid gap-4 sm:grid-cols-3">
         <StatCard stat={{ label: 'Total Billed', value: total, change: 0, trend: 'up', format: 'currency' }} icon={FileText} index={0} />
         <StatCard stat={{ label: 'Paid', value: paid, change: 0, trend: 'up', format: 'currency' }} icon={DollarSign} index={1} />
         <StatCard stat={{ label: 'Overdue', value: overdue, change: 0, trend: 'down', format: 'currency' }} icon={AlertCircle} index={2} />
       </div>
 
-      <DataTable<Invoice>
-        data={invoices}
-        loading={loading}
-        searchKeys={['number', 'clientName']}
-        searchPlaceholder="Search invoices..."
-        exportFileName="invoices"
-        columns={[
-          { header: 'Invoice', accessor: 'number', sortable: true, cell: (r) => <span className="font-medium">{r.number}</span> },
-          { header: 'Client', accessor: 'clientName', sortable: true },
-          { header: 'Issued', accessor: 'issueDate', sortable: true, cell: (r) => formatDate(r.issueDate) },
-          { header: 'Due', accessor: 'dueDate', sortable: true, cell: (r) => formatDate(r.dueDate) },
-          { header: 'Amount', accessor: 'total', sortable: true, cell: (r) => <span className="font-medium">{formatCurrency(r.total)}</span> },
-          { header: 'Status', accessor: 'status', cell: (r) => <StatusBadge status={r.status} /> },
-          ...(isAdmin ? [{
-            header: '',
-            cell: (row: Invoice) => (
-              <div className="flex gap-2 justify-end">
-                <Button size="sm" variant="ghost">
-                  <Eye className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="ghost" onClick={() => handleEdit(row)}>
-                  <Edit2 className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(row._id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            ),
-          }] : []),
-        ]}
-      />
+      <div className="mt-5">
+        <DataTable<Invoice>
+          data={invoices}
+          loading={loading}
+          searchKeys={['number', 'clientName']}
+          searchPlaceholder="Search invoices..."
+          exportFileName="invoices"
+          columns={[
+            { header: 'Invoice', accessor: 'number', sortable: true, cell: (r) => <span className="font-medium">{r.number}</span> },
+            { header: 'Client', accessor: 'clientName', sortable: true },
+            { header: 'Issued', accessor: 'issueDate', sortable: true, cell: (r) => formatDate(r.issueDate) },
+            { header: 'Due', accessor: 'dueDate', sortable: true, cell: (r) => formatDate(r.dueDate) },
+            { header: 'Amount', accessor: 'total', sortable: true, cell: (r) => <span className="font-medium">{formatCurrency(r.total)}</span> },
+            { header: 'Status', accessor: 'status', cell: (r) => <StatusBadge status={r.status} /> },
+            ...(isAdmin ? [{
+              header: '',
+              cell: (row: Invoice) => (
+                <div className="flex gap-2 justify-end">
+                  <Button size="sm" variant="ghost">
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleEdit(row)}>
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(row._id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ),
+            }] : []),
+          ]}
+        />
+      </div>
     </div>
   )
 }

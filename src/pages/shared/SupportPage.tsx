@@ -64,7 +64,7 @@ export default function SupportPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Support" subtitle="Raise and track support tickets.">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -73,11 +73,11 @@ export default function SupportPage() {
           <DialogContent>
             <form onSubmit={handleSubmit(onSubmit)}>
               <DialogHeader><DialogTitle>Create Support Ticket</DialogTitle></DialogHeader>
-              <div className="space-y-4 py-4">
+              <div className="py-4">
                 <FormField label="Subject" error={errors.subject?.message}>
                   <Input {...register('subject')} placeholder="Brief summary" />
                 </FormField>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   <FormField label="Category" error={errors.category?.message}>
                     <select {...register('category')} className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm">
                       <option>General</option><option>Technical</option><option>Billing</option><option>Feature Request</option>
@@ -89,9 +89,11 @@ export default function SupportPage() {
                     </select>
                   </FormField>
                 </div>
-                <FormField label="Description" error={errors.description?.message}>
-                  <Textarea rows={4} {...register('description')} placeholder="Describe your issue..." />
-                </FormField>
+                <div className="mt-4">
+                  <FormField label="Description" error={errors.description?.message}>
+                    <Textarea rows={4} {...register('description')} placeholder="Describe your issue..." />
+                  </FormField>
+                </div>
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
@@ -103,13 +105,15 @@ export default function SupportPage() {
       </PageHeader>
 
       {loading && tickets.length === 0 ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20" />)}</div>
+        <div className="mt-5">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className={`h-20 ${i > 0 ? 'mt-3' : ''}`} />)}</div>
       ) : tickets.length === 0 ? (
-        <EmptyState icon={<LifeBuoy className="h-6 w-6" />} title="No tickets yet" description="Create a ticket to get help from our team." />
+        <div className="mt-5">
+          <EmptyState icon={<LifeBuoy className="h-6 w-6" />} title="No tickets yet" description="Create a ticket to get help from our team." />
+        </div>
       ) : (
-        <div className="space-y-3">
-          {tickets.map((t) => (
-            <Card key={t._id} className="cursor-pointer transition-shadow hover:shadow-md" onClick={() => setActive(t)}>
+        <div className="mt-5">
+          {tickets.map((t, idx) => (
+            <Card key={t._id} className={`cursor-pointer transition-shadow hover:shadow-md ${idx > 0 ? 'mt-3' : ''}`} onClick={() => setActive(t)}>
               <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4">
                 <div className="min-w-0">
                   <p className="truncate font-medium">{t.subject}</p>
@@ -130,22 +134,22 @@ export default function SupportPage() {
           {active && (
             <>
               <DialogHeader><DialogTitle>{active.subject}</DialogTitle></DialogHeader>
-              <div className="space-y-3 py-2">
+              <div className="py-2">
                 <div className="flex items-center gap-2">
                   <StatusBadge status={active.status} />
                   <StatusBadge status={active.priority} />
                   <span className="text-xs text-text-light">{active.category}</span>
                 </div>
-                <p className="rounded-lg bg-muted p-3 text-sm">{active.description}</p>
-                <div className="max-h-56 space-y-2 overflow-y-auto">
+                <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{active.description}</p>
+                <div className="mt-3 max-h-56 overflow-y-auto">
                   {active.replies.map((r, i) => (
-                    <div key={i} className="rounded-lg border border-border p-3 text-sm">
+                    <div key={i} className={`rounded-lg border border-border p-3 text-sm ${i > 0 ? 'mt-2' : ''}`}>
                       <p className="mb-1 text-xs font-medium text-primary">{r.authorName}</p>
                       {r.message}
                     </div>
                   ))}
                 </div>
-                <div className="flex gap-2">
+                <div className="mt-3 flex gap-2">
                   <Input value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Write a reply..." />
                   <Button size="icon" onClick={sendReply} aria-label="Send reply"><Send className="h-4 w-4" /></Button>
                 </div>

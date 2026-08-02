@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { HeroDashboardMockup } from '../common/hero-dashboard-mockup';
 import { APP_CONFIG } from '@/config/navigation';
+import { Sparkles } from "lucide-react";
+
+
 
 const avatars = [
   { initials: 'AK', bg: 'from-pink-500 to-red-500' },
@@ -20,13 +23,61 @@ export function HeroSection() {
 
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-6 flex justify-center">
-          <motion.span
+          {/* <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-12 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs font-medium text-purple-400"
           >
             ✦ {APP_CONFIG.tagline}
-          </motion.span>
+          </motion.span> */}
+
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="inline-flex"
+          >
+            <div className="group relative overflow-hidden rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_8px_30px_rgba(139,92,246,0.12)]">
+
+              {/* Premium Shine */}
+              <motion.div
+                className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12"
+                animate={{
+                  x: ["-150%", "450%"],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  repeatDelay: 4,
+                  ease: "linear",
+                }}
+              />
+
+              <div className="relative flex items-center gap-2 px-5 py-2.5">
+                <motion.div
+                  animate={{
+                    opacity: [0.9, 1, 0.9],
+                    scale: [1, 1.08, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Sparkles className="h-4 w-4 text-yellow-400" />
+                </motion.div>
+
+                <span className="bg-gradient-to-r from-white via-slate-100 to-purple-200 bg-clip-text text-sm font-semibold tracking-wide text-transparent">
+                  {APP_CONFIG.tagline}
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -63,11 +114,11 @@ export function HeroSection() {
               <a href="#contact" className="inline-flex h-12 items-center justify-center gap-3 rounded-lg bg-violet-600 px-5 font-bold text-white shadow-xl shadow-violet-950/30 transition-all duration-300 hover:bg-violet-500">
                 <span>Build my product</span>
 
-                <ArrowUpRight className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={2.2}/>
+                <ArrowUpRight className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={2.2} />
               </a>
 
               <a href="#work" className="inline-flex h-12 items-center justify-center gap-3 rounded-lg border border-white/15 px-5 font-bold text-white transition-all duration-300 hover:border-violet-300/50 hover:bg-white/5">
-                <Play className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" strokeWidth={2.2} fill="currentColor"/>
+                <Play className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" strokeWidth={2.2} fill="currentColor" />
 
                 <span>See our work</span>
               </a>

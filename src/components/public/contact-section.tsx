@@ -74,9 +74,11 @@ export function ContactSection() {
 
             <div className="p-8 lg:p-12">
 
-              <span className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
-                Start something great
-              </span>
+              <div className="relative inline-flex rounded-full p-[1px] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 animate-pulse">
+                <span className="rounded-full bg-background px-4 py-1 text-sm font-medium text-primary">
+                  🚀 Start Something Great
+                </span>
+              </div>
 
               <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
                 Let's build something amazing together.
@@ -89,14 +91,14 @@ export function ContactSection() {
               <ul className="mt-10 space-y-3">
 
                 {[
-                  'Free consultation',
-                  'Fast response within 24 hours',
-                  'Custom software solutions',
+                  'Free Business & Technology Consultation',
+                  'Custom Software, ERP & AI Solutions',
+                  'Project Delivery with Ongoing Support',
                 ].map((item) => (
 
                   <li
                     key={item}
-                    className="flex items-center gap-2 text-sm text-muted-foreground"
+                    className="flex items-center mt-5 gap-2 text-sm text-muted-foreground"
                   >
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500/20">
                       ✓
@@ -111,14 +113,14 @@ export function ContactSection() {
 
               <div className="mt-10 space-y-5">
                 {details.map((d) => (
-                  <div key={d.label} className="flex items-center gap-4">
+                  <div key={d.label} className="mt-5 flex items-center gap-4">
 
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                       <d.icon className="h-5 w-5" />
                     </div>
 
                     <div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm  text-muted-foreground">
                         {d.label}
                       </p>
 
@@ -131,7 +133,7 @@ export function ContactSection() {
                 ))}
               </div>
 
-              
+
 
             </div>
 

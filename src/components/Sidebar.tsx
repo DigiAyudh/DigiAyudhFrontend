@@ -62,15 +62,15 @@ export default function Sidebar() {
   return (
     <aside className="w-64 bg-surface border-r border-border h-screen overflow-y-auto fixed left-0 top-16">
       <div className="p-6">
-        <nav className="space-y-2">
-          {menuItems.map((item) => {
+        <nav>
+          {menuItems.map((item, idx) => {
             const Icon = item.icon
             const isActive = location.pathname === item.path
             return (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${idx > 0 ? 'mt-2' : ''} ${
                   isActive
                     ? 'bg-primary text-white'
                     : 'text-text-light hover:bg-surface-dark'

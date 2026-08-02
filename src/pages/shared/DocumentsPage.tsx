@@ -190,7 +190,7 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       {canUpload && (
         <Card className="border-blue-200 bg-blue-50">
           <CardContent className="p-4">
@@ -205,7 +205,7 @@ export default function DocumentsPage() {
       )}
 
 
-      <div className="flex items-center justify-between">
+      <div className={`flex items-center justify-between ${canUpload ? 'mt-5' : ''}`}>
         <PageHeader title="Documents" subtitle="Contracts, reports and shared files." />
         {canUpload && (
           <div className="flex gap-2">
@@ -223,11 +223,11 @@ export default function DocumentsPage() {
                     Upload files to share with team members. Project selection is mandatory.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div>
+                  <div>
                     <Label htmlFor="project">Project *</Label>
                     <Select value={selectedProject} onValueChange={setSelectedProject}>
-                      <SelectTrigger>
+                      <SelectTrigger className="mt-1.5">
                         <SelectValue placeholder="Select a project" />
                       </SelectTrigger>
                       <SelectContent>
@@ -245,7 +245,7 @@ export default function DocumentsPage() {
                   />
                   <Button 
                     onClick={() => fileInputRef.current?.click()} 
-                    className="w-full gap-2"
+                    className="mt-4 w-full gap-2"
                     disabled={selectedProject === 'all'}
                   >
                     <Plus className="h-4 w-4" />
@@ -269,11 +269,11 @@ export default function DocumentsPage() {
                     Share a link to external resources (documentation, repositories, etc.)
                   </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div>
+                  <div>
                     <Label htmlFor="project-link">Project *</Label>
                     <Select value={selectedProject} onValueChange={setSelectedProject}>
-                      <SelectTrigger>
+                      <SelectTrigger className="mt-1.5">
                         <SelectValue placeholder="Select a project" />
                       </SelectTrigger>
                       <SelectContent>
@@ -283,16 +283,17 @@ export default function DocumentsPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="space-y-2">
+                  <div className="mt-4">
                     <Label htmlFor="title">Link Title *</Label>
                     <Input
                       id="title"
                       value={linkTitle}
                       onChange={(e) => setLinkTitle(e.target.value)}
                       placeholder="e.g., API Documentation"
+                      className="mt-1.5"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="mt-4">
                     <Label htmlFor="url">URL *</Label>
                     <Input
                       id="url"
@@ -300,11 +301,12 @@ export default function DocumentsPage() {
                       value={linkUrl}
                       onChange={(e) => setLinkUrl(e.target.value)}
                       placeholder="https://example.com"
+                      className="mt-1.5"
                     />
                   </div>
                   <Button 
                     onClick={handleAddLink} 
-                    className="w-full"
+                    className="mt-4 w-full"
                     disabled={selectedProject === 'all'}
                   >
                     Add Link
@@ -317,7 +319,7 @@ export default function DocumentsPage() {
       </div>
 
       {isAdmin && (
-        <Card>
+        <Card className="mt-5">
           <CardContent className="p-4">
             <div className="flex items-center gap-4 flex-wrap">
               <div className="flex items-center gap-2">
@@ -350,7 +352,6 @@ export default function DocumentsPage() {
                     <SelectItem key={"client-" + c._id} value={String(c._id)}>{c.name} (Client)</SelectItem>
                   ))}
                 </SelectContent>
-```
               </Select>
 
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -369,13 +370,13 @@ export default function DocumentsPage() {
         </Card>
       )}
 
-      <Tabs defaultValue="files" className="w-full">
+      <Tabs defaultValue="files" className="mt-5 w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="files">Files</TabsTrigger>
           <TabsTrigger value="links">Links</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="files" className="space-y-4">
+        <TabsContent value="files" className="mt-4">
           {loading && filteredDocuments.filter((d) => d.type === 'file').length === 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
@@ -403,16 +404,16 @@ export default function DocumentsPage() {
                       </div>
                       
                       {isAdmin && (
-                        <div className="text-xs space-y-1 border-t pt-2">
+                        <div className="text-xs border-t pt-2">
                           <div className="flex items-center gap-1">
                             <FolderKanban className="h-3 w-3" />
                             <span className="truncate">{doc.projectName || 'No Project'}</span>
                           </div>
-                          <div className="flex items-center gap-1">
+                          <div className="mt-1 flex items-center gap-1">
                             <UserIcon className="h-3 w-3" />
                             <span className="truncate">{doc.ownerName || getUploadedByName(doc.uploadedBy)}</span>
                           </div>
-                          <div className="text-text-light">{formatDate(doc.createdAt)}</div>
+                          <div className="mt-1 text-text-light">{formatDate(doc.createdAt)}</div>
                         </div>
                       )}
                       
@@ -440,7 +441,7 @@ export default function DocumentsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="links" className="space-y-4">
+        <TabsContent value="links" className="mt-4">
           {filteredDocuments.filter((d) => d.type === 'link').length === 0 ? (
             <EmptyState icon={<LinkIcon className="h-6 w-6" />} title="No links" description="Shared links will appear here." />
           ) : (
@@ -459,16 +460,16 @@ export default function DocumentsPage() {
                     </div>
                     
                     {isAdmin && (
-                      <div className="text-xs space-y-1 border-t pt-2">
+                      <div className="text-xs border-t pt-2">
                         <div className="flex items-center gap-1">
                           <FolderKanban className="h-3 w-3" />
                           <span className="truncate">{doc.projectName || 'No Project'}</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="mt-1 flex items-center gap-1">
                           <UserIcon className="h-3 w-3" />
                           <span className="truncate">{doc.ownerName || getUploadedByName(doc.uploadedBy)}</span>
                         </div>
-                        <div className="text-text-light">{formatDate(doc.createdAt)}</div>
+                        <div className="mt-1 text-text-light">{formatDate(doc.createdAt)}</div>
                       </div>
                     )}
                     

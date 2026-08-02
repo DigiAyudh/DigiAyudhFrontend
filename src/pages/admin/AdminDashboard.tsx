@@ -59,10 +59,10 @@ export default function AdminDashboard() {
   const recentDocuments = documents.slice(0, 3)
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Admin Overview" subtitle="Company-wide performance and activity at a glance." />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {loading && stats.length === 0
           ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)
           : stats.map((stat, i) => (
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
             ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <ChartCard title="Revenue Trend" subtitle="Last 6 months" className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={revenueData} margin={{ left: -8, right: 8, top: 8 }}>
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
         </ChartCard>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle>Pending Client Verifications</CardTitle>
@@ -117,9 +117,9 @@ export default function AdminDashboard() {
               Review <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {pendingClients.slice(0, 5).map((c) => (
-              <div key={c._id} className="flex items-center justify-between gap-2">
+          <CardContent>
+            {pendingClients.slice(0, 5).map((c, idx) => (
+              <div key={c._id} className={`flex items-center justify-between gap-2 ${idx > 0 ? 'mt-3' : ''}`}>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">{c.name}</p>
                   <p className="truncate text-xs text-text-light">{c.companyName || c.email}</p>
@@ -138,9 +138,9 @@ export default function AdminDashboard() {
               View all <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {newRequests.slice(0, 5).map((r) => (
-              <div key={r._id} className="flex items-start gap-3">
+          <CardContent>
+            {newRequests.slice(0, 5).map((r, idx) => (
+              <div key={r._id} className={`flex items-start gap-3 ${idx > 0 ? 'mt-3' : ''}`}>
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Clock className="h-4 w-4" />
                 </div>
@@ -156,17 +156,17 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Documents Section */}
-      <Card>
+      <Card className="mt-5">
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Recent Documents</CardTitle>
           <Link to="/admin/documents" className="flex items-center gap-1 text-sm text-primary hover:underline">
             All <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           {recentDocuments.length > 0 ? (
-            recentDocuments.map((doc) => (
-              <div key={doc._id} className="flex items-center justify-between">
+            recentDocuments.map((doc, idx) => (
+              <div key={doc._id} className={`flex items-center justify-between ${idx > 0 ? 'mt-4' : ''}`}>
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <FileText className="h-5 w-5" />

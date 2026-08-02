@@ -184,7 +184,7 @@ dispatch(fetchClients(user?.companyName))
   const sorted = [...meetings].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="flex items-center justify-between">
         <PageHeader title="Meetings" subtitle="Schedule and manage team meetings." />
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -209,8 +209,8 @@ dispatch(fetchClients(user?.companyName))
                 {editingId ? 'Update meeting details' : 'Schedule a new meeting with attendees'}
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div>
                 <Label htmlFor="type">Meeting Type *</Label>
                 <Select
                   value={meetingType}
@@ -220,7 +220,7 @@ dispatch(fetchClients(user?.companyName))
                     setSelectedClients([])
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="mt-1.5">
                     <SelectValue placeholder="Select meeting type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -230,67 +230,73 @@ dispatch(fetchClients(user?.companyName))
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="mt-4">
                 <Label htmlFor="title">Meeting Title *</Label>
                 <Input
                   id="title"
                   placeholder="e.g., Project Planning Session"
+                  className="mt-1.5"
                   {...register('title')}
                 />
-                {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
+                {errors.title && <p className="mt-1 text-xs text-destructive">{errors.title.message}</p>}
               </div>
 
-              <div className="space-y-2">
+              <div className="mt-4">
                 <Label htmlFor="description">Description</Label>
                 <Input
                   id="description"
                   placeholder="Meeting agenda and notes"
+                  className="mt-1.5"
                   {...register('description')}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div>
                   <Label htmlFor="start">Start Date & Time *</Label>
                   <Input
                     id="start"
                     type="datetime-local"
+                    className="mt-1.5"
                     {...register('start')}
                   />
-                  {errors.start && <p className="text-xs text-destructive">{errors.start.message}</p>}
+                  {errors.start && <p className="mt-1 text-xs text-destructive">{errors.start.message}</p>}
                 </div>
-                <div className="space-y-2">
+                <div>
                   <Label htmlFor="end">End Date & Time *</Label>
                   <Input
                     id="end"
                     type="datetime-local"
+                    className="mt-1.5"
                     {...register('end')}
                   />
-                  {errors.end && <p className="text-xs text-destructive">{errors.end.message}</p>}
+                  {errors.end && <p className="mt-1 text-xs text-destructive">{errors.end.message}</p>}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div>
                   <Label htmlFor="location">Location</Label>
                   <Input
                     id="location"
                     placeholder="Conference Room A"
+                    className="mt-1.5"
                     {...register('location')}
                   />
                 </div>
-                <div className="space-y-2">
+                <div>
                   <Label htmlFor="link">Video Call Link</Label>
                   <Input
                     id="link"
                     placeholder="https://zoom.us/..."
+                    className="mt-1.5"
                     {...register('link')}
                   />
                 </div>
               </div>
 
               {meetingType === 'team' && (
-                <div className="space-y-2">
+                <div className="mt-4">
                   <div className="flex items-center justify-between">
                     <Label>Select Employees</Label>
                     <Button
@@ -302,9 +308,9 @@ dispatch(fetchClients(user?.companyName))
                       Select All
                     </Button>
                   </div>
-                  <div className="max-h-40 overflow-y-auto border rounded-lg p-2 space-y-2">
-                    {employees.filter((e) => e.isActive).map((emp) => (
-                      <div key={emp._id} className="flex items-center space-x-2">
+                  <div className="mt-1.5 max-h-40 overflow-y-auto border rounded-lg p-2">
+                    {employees.filter((e) => e.isActive).map((emp, idx) => (
+                      <div key={emp._id} className={`flex items-center space-x-2 ${idx > 0 ? 'mt-2' : ''}`}>
                         <Checkbox
                           id={`emp-${emp._id}`}
                           checked={selectedEmployees.includes(emp._id)}
@@ -320,15 +326,15 @@ dispatch(fetchClients(user?.companyName))
               )}
 
               {meetingType === 'client' && (
-                <div className="space-y-2">
+                <div className="mt-4">
                   <Label>Select Clients</Label>
-                  <div className="max-h-40 overflow-y-auto border rounded-lg p-2 space-y-2">
+                  <div className="mt-1.5 max-h-40 overflow-y-auto border rounded-lg p-2">
 
                     {/* {clients.filter((c) => c).map((client) => ( */}
 
-                    {clients.filter((c) => c.verificationStatus === 'verified').map((client) => (
+                    {clients.filter((c) => c.verificationStatus === 'verified').map((client, idx) => (
 
-                      <div key={client._id} className="flex items-center space-x-2">
+                      <div key={client._id} className={`flex items-center space-x-2 ${idx > 0 ? 'mt-2' : ''}`}>
                         <Checkbox
                           id={`client-${client._id}`}
                           checked={selectedClients.includes(client._id)}
@@ -365,13 +371,15 @@ dispatch(fetchClients(user?.companyName))
       </div>
 
       {loading && meetings.length === 0 ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div>
+        <div className="mt-5">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className={`h-24 ${i > 0 ? 'mt-3' : ''}`} />)}</div>
       ) : sorted.length === 0 ? (
-        <EmptyState icon={<Calendar className="h-6 w-6" />} title="No meetings scheduled" description="Create a new meeting to get started." />
+        <div className="mt-5">
+          <EmptyState icon={<Calendar className="h-6 w-6" />} title="No meetings scheduled" description="Create a new meeting to get started." />
+        </div>
       ) : (
-        <div className="space-y-3">
-          {sorted.map((m) => (
-            <Card key={m._id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setShowDetails(m)}>
+        <div className="mt-5">
+          {sorted.map((m, idx) => (
+            <Card key={m._id} className={`cursor-pointer hover:shadow-md transition-shadow ${idx > 0 ? 'mt-3' : ''}`} onClick={() => setShowDetails(m)}>
               <CardContent className="flex flex-wrap items-center gap-4 p-4">
                 <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <span className="text-xs font-medium">{new Date(m.start).toLocaleDateString('en-US', { month: 'short' })}</span>
@@ -431,7 +439,7 @@ dispatch(fetchClients(user?.companyName))
             </DialogDescription>
           </DialogHeader>
           {showDetails && (
-            <div className="space-y-4">
+            <div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-text-light">Date & Time</p>
@@ -444,21 +452,21 @@ dispatch(fetchClients(user?.companyName))
               </div>
 
               {showDetails.description && (
-                <div>
+                <div className="mt-4">
                   <p className="text-xs text-text-light">Description</p>
                   <p className="text-sm">{showDetails.description}</p>
                 </div>
               )}
 
               {showDetails.location && (
-                <div>
+                <div className="mt-4">
                   <p className="text-xs text-text-light">Location</p>
                   <p className="text-sm">{showDetails.location}</p>
                 </div>
               )}
 
               {showDetails.link && (
-                <div>
+                <div className="mt-4">
                   <p className="text-xs text-text-light">Meeting Link</p>
                   <a href={showDetails.link} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline">
                     {showDetails.link}
@@ -466,27 +474,27 @@ dispatch(fetchClients(user?.companyName))
                 </div>
               )}
 
-              <div>
+              <div className="mt-4">
                 <p className="text-xs text-text-light">Organizer</p>
                 <p className="text-sm font-medium">{showDetails.organizerName || 'Admin'}</p>
               </div>
 
               {showDetails.type === 'team' && showDetails.attendees && (
-                <div>
+                <div className="mt-4">
                   <p className="text-xs text-text-light">Participants (Employees)</p>
                   <p className="text-sm">{showDetails.attendees.length} employees invited</p>
                 </div>
               )}
 
               {showDetails.type === 'client' && showDetails.clientIds && (
-                <div>
+                <div className="mt-4">
                   <p className="text-xs text-text-light">Participants (Clients)</p>
                   <p className="text-sm">{showDetails.clientIds.length} clients invited</p>
                 </div>
               )}
 
               {showDetails.link && (
-                <Button className="w-full gap-2" onClick={() => window.open(showDetails.link, '_blank')}>
+                <Button className="mt-4 w-full gap-2" onClick={() => window.open(showDetails.link, '_blank')}>
                   <Video className="h-4 w-4" />
                   Join Meeting
                 </Button>

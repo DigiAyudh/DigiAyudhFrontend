@@ -149,12 +149,12 @@ export default function LeaveRequestsPage() {
   const approvedRequests = leaveRequests.filter((l) => l.status === 'approved')
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Leave Management" subtitle="Manage employee leave requests and approvals.">
         <Button onClick={() => setLeaveDialogOpen(true)}><Plus className="h-4 w-4" /> New Leave Request</Button>
       </PageHeader>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="mt-5 grid gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -184,21 +184,23 @@ export default function LeaveRequestsPage() {
         </div>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={leaveRequests}
-        loading={loading}
-        searchPlaceholder="Search by employee name..."
-        searchKeys={['employeeName', 'leaveType']}
-        exportFileName="leave-requests"
-      />
+      <div className="mt-5">
+        <DataTable
+          columns={columns}
+          data={leaveRequests}
+          loading={loading}
+          searchPlaceholder="Search by employee name..."
+          searchKeys={['employeeName', 'leaveType']}
+          exportFileName="leave-requests"
+        />
+      </div>
 
       <Dialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Create Leave Request</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div>
             <FormField label="Employee">
               <Select value={selectedEmployee?._id || ''} onValueChange={(id) => setSelectedEmployee(employees.find((e) => e._id === id) || null)}>
                 <SelectTrigger>
@@ -212,21 +214,23 @@ export default function LeaveRequestsPage() {
               </Select>
             </FormField>
 
-            <FormField label="Leave Type">
-              <Select value={leaveType} onValueChange={(t) => setLeaveType(t as 'sick' | 'personal' | 'vacation' | 'other')}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sick">Sick Leave</SelectItem>
-                  <SelectItem value="personal">Personal Leave</SelectItem>
-                  <SelectItem value="vacation">Vacation</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormField>
+            <div className="mt-4">
+              <FormField label="Leave Type">
+                <Select value={leaveType} onValueChange={(t) => setLeaveType(t as 'sick' | 'personal' | 'vacation' | 'other')}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sick">Sick Leave</SelectItem>
+                    <SelectItem value="personal">Personal Leave</SelectItem>
+                    <SelectItem value="vacation">Vacation</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormField>
+            </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               <FormField label="Start Date">
                 <Input 
                   type="date" 
@@ -243,16 +247,18 @@ export default function LeaveRequestsPage() {
               </FormField>
             </div>
 
-            <FormField label="Reason">
-              <Textarea 
-                value={reason} 
-                onChange={(e) => setReason(e.target.value)} 
-                placeholder="Reason for leave..."
-                className="min-h-24"
-              />
-            </FormField>
+            <div className="mt-4">
+              <FormField label="Reason">
+                <Textarea 
+                  value={reason} 
+                  onChange={(e) => setReason(e.target.value)} 
+                  placeholder="Reason for leave..."
+                  className="min-h-24"
+                />
+              </FormField>
+            </div>
 
-            <DialogFooter>
+            <DialogFooter className="mt-4">
               <Button variant="outline" onClick={() => { setLeaveDialogOpen(false); resetForm(); }}>Cancel</Button>
               <Button onClick={handleCreateLeaveRequest}>Create Request</Button>
             </DialogFooter>
@@ -274,19 +280,21 @@ export default function LeaveRequestsPage() {
           <DialogHeader>
             <DialogTitle>Reject Leave Request</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div>
             <p className="text-sm text-muted-foreground">
               Rejecting leave for <span className="font-medium">{rejecting?.employeeName}</span>
             </p>
-            <FormField label="Rejection Reason">
-              <Textarea 
-                value={rejectionReason} 
-                onChange={(e) => setRejectionReason(e.target.value)} 
-                placeholder="Reason for rejection..."
-                className="min-h-24"
-              />
-            </FormField>
-            <DialogFooter>
+            <div className="mt-4">
+              <FormField label="Rejection Reason">
+                <Textarea 
+                  value={rejectionReason} 
+                  onChange={(e) => setRejectionReason(e.target.value)} 
+                  placeholder="Reason for rejection..."
+                  className="min-h-24"
+                />
+              </FormField>
+            </div>
+            <DialogFooter className="mt-4">
               <Button variant="outline" onClick={() => setRejecting(null)}>Cancel</Button>
               <Button onClick={handleReject} variant="destructive">Reject</Button>
             </DialogFooter>

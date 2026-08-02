@@ -75,21 +75,21 @@ export default function LoginPage() {
   // };
 
   const onSubmit = async (data: LoginFormData) => {
-  try {
-    const user = await login(data.email, data.password); // no role param
-    toast.success('Welcome back!');
+    try {
+      const user = await login(data.email, data.password); // no role param
+      toast.success('Welcome back!');
 
-    const dashboardRoutes: Record<string, string> = {
-      admin: '/admin',
-      employee: '/employee',
-      client: '/client',
-    };
-    navigate(dashboardRoutes[user.role] || '/client'); // ✅ actual role se
-  } catch (err) {
-    const error = err as ApiError;
-    toast.error(error.message ?? 'Login failed');
-  }
-};
+      const dashboardRoutes: Record<string, string> = {
+        admin: '/admin',
+        employee: '/employee',
+        client: '/client',
+      };
+      navigate(dashboardRoutes[user.role] || '/client'); // ✅ actual role se
+    } catch (err) {
+      const error = err as ApiError;
+      toast.error(error.message ?? 'Login failed');
+    }
+  };
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
@@ -111,15 +111,22 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-muted-foreground">Sign in to your DigiAyudh account</p>
         </div>
 
-        <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-xl">
-          <CardHeader className="space-y-1 pb-5">
-            <CardDescription className="text-xs uppercase tracking-wider text-muted-foreground">Login</CardDescription>
+        <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-xl">          <CardHeader className="pb-6">
+          <CardHeader className="space-y-2  text-center">
+            <CardTitle className="text-3xl font-bold tracking-tight">
+              Sign In
+            </CardTitle>
+
+            <CardDescription className="text-sm">
+              Access your dashboard securely.
+            </CardDescription>
           </CardHeader>
+        </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <div className="relative">
+                <div className="relative mt-4">
                   <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="email"
@@ -134,9 +141,9 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 mt-4">
                 <Label htmlFor="password">Password</Label>
-                <div className="relative">
+                <div className="relative mt-4">
                   <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
@@ -151,7 +158,11 @@ export default function LoginPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    {showPassword ? (
+                      <EyeOff className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (
@@ -159,24 +170,24 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end mt-4">
                 <Link to="/forgot-password" className="text-xs text-primary hover:text-primary-dark transition-colors">
                   Forgot password?
                 </Link>
               </div>
 
-              <Button variant="brand" className="w-full h-11" type="submit" disabled={isLoading}>
+              <Button variant="brand" className="w-full h-11 mt-4" type="submit" disabled={isLoading}>
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </Button>
 
-              <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center gap-2 mt-4">
                 <div className="flex-1 border-t border-border" />
                 <span className="text-xs text-muted-foreground">or</span>
                 <div className="flex-1 border-t border-border" />
               </div>
 
               <Link to="/signup" className="block">
-                <Button variant="outline" className="w-full h-11">
+                <Button variant="outline" className="w-full h-11 mt-4">
                   Create account
                 </Button>
               </Link>

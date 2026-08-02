@@ -57,16 +57,18 @@ export default function AdminsPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Administrators" subtitle="Team members with full system access." />
-      <DataTable
-        columns={columns}
-        data={admins}
-        loading={loading}
-        searchPlaceholder="Search admins..."
-        searchKeys={['name', 'email']}
-        exportFileName="admins"
-      />
+      <div className="mt-5">
+        <DataTable
+          columns={columns}
+          data={admins}
+          loading={loading}
+          searchPlaceholder="Search admins..."
+          searchKeys={['name', 'email']}
+          exportFileName="admins"
+        />
+      </div>
     </div>
   )
 }

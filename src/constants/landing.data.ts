@@ -280,12 +280,41 @@ export const testimonial: Testimonial = {
   metricLabel: 'conversion rate after launch',
 };
 
+// export const trustedClients: Client[] = [
+//   { id: '1', name: 'Northstar', logo: '◆' },
+//   { id: '2', name: 'Vertex', logo: '◒' },
+//   { id: '3', name: 'Pulse', logo: '✦' },
+//   { id: '4', name: 'Mono', logo: '◉' },
+//   { id: '5', name: 'Kinetic', logo: '▲' },
+// ];
+
+
 export const trustedClients: Client[] = [
-  { id: '1', name: 'Northstar', logo: '◆' },
-  { id: '2', name: 'Vertex', logo: '◒' },
-  { id: '3', name: 'Pulse', logo: '✦' },
-  { id: '4', name: 'Mono', logo: '◉' },
-  { id: '5', name: 'Kinetic', logo: '▲' },
+  {
+    id: "1",
+    name: "Northstar",
+    logo: "",
+  },
+  {
+    id: "2",
+    name: "Vertex",
+    logo: "/logos/vertex.png",
+  },
+  {
+    id: "3",
+    name: "Pulse",
+    logo: "/logos/pulse.png",
+  },
+  {
+    id: "4",
+    name: "Mono",
+    logo: "/logos/mono.png",
+  },
+  {
+    id: "5",
+    name: "Kinetic",
+    logo: "/logos/kinetic.png",
+  },
 ];
 
 export const stats: Stat[] = [

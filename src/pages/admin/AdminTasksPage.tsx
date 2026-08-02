@@ -362,6 +362,7 @@ export default function AdminTasksPage() {
         searchPlaceholder="Search tasks..."
         searchKeys={['title', 'description']}
         exportFileName="tasks"
+        
       />
     </div>
   )

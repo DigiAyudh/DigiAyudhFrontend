@@ -201,26 +201,28 @@ export default function EmployeesPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Employees" subtitle="Manage your team members and their roles.">
         <Button onClick={openCreate}><Plus className="h-4 w-4" /> Add Employee</Button>
       </PageHeader>
 
-      <DataTable
-        columns={columns}
-        data={employees}
-        loading={loading}
-        searchPlaceholder="Search employees..."
-        searchKeys={['name', 'email', 'position', 'department']}
-        exportFileName="employees"
-      />
+      <div className="mt-5">
+        <DataTable
+          columns={columns}
+          data={employees}
+          loading={loading}
+          searchPlaceholder="Search employees..."
+          searchKeys={['name', 'email', 'position', 'department']}
+          exportFileName="employees"
+        />
+      </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg mt-5">
           <DialogHeader>
             <DialogTitle>{editing ? 'Edit Employee' : 'Add Employee'}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField label="Full Name" error={errors.name?.message}>
                 <Input {...register('name')} placeholder="Jane Doe" />
@@ -260,7 +262,7 @@ export default function EmployeesPage() {
                 </FormField>
               )}
             </div>
-            <DialogFooter>
+            <DialogFooter className="mt-4">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
               <Button type="submit" disabled={isSubmitting}>{editing ? 'Save changes' : 'Add employee'}</Button>
             </DialogFooter>
@@ -273,7 +275,7 @@ export default function EmployeesPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2"><Key className="h-5 w-5" /> Set Password</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div>
             <div>
               <p className="mb-2 text-sm text-muted-foreground">For: <span className="font-medium">{settingPassword?.name}</span></p>
               <FormField label="New Password">
@@ -285,7 +287,7 @@ export default function EmployeesPage() {
                 />
               </FormField>
             </div>
-            <DialogFooter>
+            <DialogFooter className="mt-4">
               <Button type="button" variant="outline" onClick={() => setSettingPassword(null)}>Cancel</Button>
               <Button onClick={handleSetPassword}>Set Password</Button>
             </DialogFooter>

@@ -46,10 +46,10 @@ export default function TaskBoard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Task Board" subtitle="Track work across stages. Click a card to advance it." />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {COLUMNS.map((col) => {
           const items = tasks.filter((t) => t.status === col.key)
           return (

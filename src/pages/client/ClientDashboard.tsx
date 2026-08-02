@@ -213,10 +213,10 @@ export default function ClientDashboard() {
     .slice(0, 3)
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title={`Welcome, ${user?.name?.split(' ')[0] || 'there'}`} subtitle="Track your projects, invoices, meetings and reviews." />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {loading && stats.length === 0
           ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)
           : stats.map((stat, i) => (
@@ -224,7 +224,7 @@ export default function ClientDashboard() {
           ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle>My Projects</CardTitle>
@@ -232,26 +232,26 @@ export default function ClientDashboard() {
               View all <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {projects.slice(0, 5).map((p) => (
-              <Link key={p._id} to={`/client/projects/${p._id}`} className="block space-y-1.5 rounded-lg p-2 hover:bg-muted">
+          <CardContent>
+            {projects.slice(0, 5).map((p, idx) => (
+              <Link key={p._id} to={`/client/projects/${p._id}`} className={`block rounded-lg p-2 hover:bg-muted ${idx > 0 ? 'mt-4' : ''}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="truncate text-sm font-medium">{p.title}</span>
                   <StatusBadge status={p.status} />
                 </div>
-                <Progress value={projectProgress(p.status)} />
+                <Progress value={projectProgress(p.status)} className="mt-1.5" />
               </Link>
             ))}
             {projects.length === 0 && <p className="py-4 text-center text-sm text-text-light">No active projects</p>}
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
+        <div>
           <Card>
             <CardHeader><CardTitle>Upcoming Meetings</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {upcoming.map((m) => (
-                <div key={m._id} className="flex items-start gap-3">
+            <CardContent>
+              {upcoming.map((m, idx) => (
+                <div key={m._id} className={`flex items-start gap-3 ${idx > 0 ? 'mt-3' : ''}`}>
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Calendar className="h-4 w-4" />
                   </div>
@@ -265,11 +265,11 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="mt-4">
             <CardHeader><CardTitle>Recent Invoices</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {invoices.slice(0, 3).map((inv) => (
-                <div key={inv._id} className="flex items-center justify-between gap-2">
+            <CardContent>
+              {invoices.slice(0, 3).map((inv, idx) => (
+                <div key={inv._id} className={`flex items-center justify-between gap-2 ${idx > 0 ? 'mt-3' : ''}`}>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{inv.number}</p>
                     <p className="text-xs text-text-light">{formatCurrency(inv.total)}</p>
@@ -284,7 +284,7 @@ export default function ClientDashboard() {
       </div>
 
       {/* My Reviews Section */}
-      <Card>
+      <Card className="mt-5">
         <CardHeader className="flex-row items-center justify-between">
           <div className="flex items-center gap-2">
             <Star className="h-5 w-5 text-yellow-400" />
@@ -304,15 +304,15 @@ export default function ClientDashboard() {
                   {editingReview ? 'Update your rating and feedback.' : 'Share your experience with a project.'}
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
+              <div className="py-4">
+                <div>
                   <label className="text-sm font-medium">Project</label>
                   <Select
                     value={selectedProject}
                     onValueChange={setSelectedProject}
                     disabled={!!editingReview}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="mt-1.5">
                       <SelectValue placeholder="Select a project" />
                     </SelectTrigger>
                     <SelectContent>
@@ -329,11 +329,13 @@ export default function ClientDashboard() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
+                <div className="mt-4">
                   <label className="text-sm font-medium">Rating</label>
-                  <StarInput value={rating} onChange={setRating} />
+                  <div className="mt-1.5">
+                    <StarInput value={rating} onChange={setRating} />
+                  </div>
                 </div>
-                <div className="space-y-2">
+                <div className="mt-4">
                   <label className="text-sm font-medium">Feedback</label>
                   <Textarea
                     placeholder="Share your experience..."
@@ -341,6 +343,7 @@ export default function ClientDashboard() {
                     onChange={(e) => setReviewText(e.target.value)}
                     rows={4}
                     maxLength={1000}
+                    className="mt-1.5"
                   />
                   <p className="text-xs text-muted-foreground text-right">
                     {reviewText.length}/1000
@@ -348,7 +351,7 @@ export default function ClientDashboard() {
                 </div>
                 <Button
                   onClick={handleSubmitReview}
-                  className="w-full"
+                  className="mt-4 w-full"
                   disabled={isSubmitting || !selectedProject || !rating || !reviewText.trim()}
                   loading={isSubmitting}
                 >

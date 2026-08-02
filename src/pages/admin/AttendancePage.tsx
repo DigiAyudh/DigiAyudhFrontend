@@ -1,236 +1,374 @@
 import { useEffect, useState } from 'react'
-import { Plus, CheckCircle, XCircle, Clock, Calendar } from 'lucide-react'
+import { ListChecks, Plus, Edit2, Trash2 } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { fetchAttendance, markAttendance } from '../../redux/slices/attendanceSlice'
-import { fetchEmployees } from '../../redux/slices/employeesSlice'
+import { fetchTasks } from '../../redux/slices/tasksSlice'
+import apiClient from '../../services/api'
 import { PageHeader } from '../../components/common/PageHeader'
 import { DataTable, type Column } from '../../components/common/DataTable'
 import { Button } from '../../components/ui/button'
-import { Badge } from '../../components/ui/badge'
 import { Input } from '../../components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../../components/ui/dialog'
+import { Label } from '../../components/ui/label'
+import { Textarea } from '../../components/ui/textarea'
+import { StatusBadge } from '../../components/common/StatusBadge'
+import { Avatar, AvatarFallback } from '../../components/ui/avatar'
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '../../components/ui/select'
-import { FormField } from '../../components/common/FormField'
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card'
-import type { Attendance } from '../../redux/slices/attendanceSlice'
-import type { Employee } from '../../types'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../../components/ui/dialog'
+import { formatDate, getInitials } from '../../lib/utils'
+import type { Task, User } from '../../types'
 
-export default function AttendancePage() {
+const taskSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  status: z.enum(['todo', 'in-progress', 'review', 'completed']),
+  priority: z.enum(['low', 'medium', 'high']),
+  assignedTo: z.string().min(1, 'Please assign to an employee'),
+  dueDate: z.string().min(1, 'Due date is required'),
+  estimatedHours: z.string().optional(),
+})
+
+type TaskFormData = z.infer<typeof taskSchema>
+
+export default function AdminTasksPage() {
   const dispatch = useAppDispatch()
-  const { attendance, loading } = useAppSelector((s) => s.attendance)
-  const { employees } = useAppSelector((s) => s.employees)
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
-  const [markDialogOpen, setMarkDialogOpen] = useState(false)
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
-  const [status, setStatus] = useState<'present' | 'absent'>('present')
-  const [checkInTime, setCheckInTime] = useState('')
-  const [checkOutTime, setCheckOutTime] = useState('')
+  const { tasks, loading } = useAppSelector((s) => s.tasks)
+  const { user } = useAppSelector((s) => s.auth)
+  const [employees, setEmployees] = useState<User[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      status: 'todo',
+      priority: 'medium',
+    },
+  })
 
   useEffect(() => {
-    dispatch(fetchEmployees('digiayudh'))
-    dispatch(fetchAttendance({ company: 'digiayudh', date: selectedDate }))
-  }, [dispatch, selectedDate])
-
-  const handleMarkAttendance = async () => {
-    if (!selectedEmployee) {
-      toast.error('Select an employee')
-      return
+    dispatch(fetchTasks())
+    const loadEmployees = async () => {
+      try {
+        const res = await apiClient.getEmployeeAccounts()
+        setEmployees(res.data.data as User[])
+      } catch (error) {
+        console.error('Failed to load employees')
+      }
     }
+    loadEmployees()
+  }, [dispatch])
+
+  const onSubmit = async (data: TaskFormData) => {
+    setIsSubmitting(true)
+    try {
+      const taskData = {
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        priority: data.priority,
+        assignedTo: data.assignedTo,
+        dueDate: new Date(data.dueDate),
+        estimatedHours: data.estimatedHours ? Number(data.estimatedHours) : undefined,
+        projectId: 'p_default',
+        createdBy: user?._id,
+        company: 'digiayudh',
+      }
+
+      if (editingId) {
+        await apiClient.updateTask(editingId, taskData)
+        toast.success('Task updated successfully')
+      } else {
+        await apiClient.createTask(taskData)
+        toast.success('Task created successfully')
+      }
+
+      dispatch(fetchTasks())
+      setIsOpen(false)
+      setEditingId(null)
+      reset()
+    } catch (error) {
+      toast.error('Failed to save task')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleEdit = (task: Task) => {
+    setEditingId(task._id)
+    reset({
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      assignedTo: task.assignedTo,
+      dueDate: task.dueDate?.toString().split('T')[0],
+      estimatedHours: task.estimatedHours?.toString(),
+    })
+    setIsOpen(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this task?')) return
 
     try {
-      await dispatch(markAttendance({
-        employeeId: selectedEmployee._id,
-        date: selectedDate,
-        status,
-        checkInTime: status === 'present' ? checkInTime : undefined,
-        checkOutTime: status === 'present' ? checkOutTime : undefined,
-      })).unwrap()
-      toast.success('Attendance marked')
-      setMarkDialogOpen(false)
-      setSelectedEmployee(null)
-      setCheckInTime('')
-      setCheckOutTime('')
-    } catch (err) {
-      toast.error(typeof err === 'string' ? err : 'Failed to mark attendance')
+      await apiClient.deleteTask(id)
+      toast.success('Task deleted successfully')
+      dispatch(fetchTasks())
+    } catch (error) {
+      toast.error('Failed to delete task')
     }
   }
 
-  const todayAttendance = attendance.filter((a) => a.date === selectedDate)
-  const absentToday = employees.filter(
-    (e) => !todayAttendance.find((a) => a.employeeId === e._id)
-  )
-
-  const stats = {
-    present: todayAttendance.filter((a) => a.status === 'present').length,
-    absent: todayAttendance.filter((a) => a.status === 'absent').length,
-    onLeave: todayAttendance.filter((a) => a.status === 'leave').length,
+  const getAssigneeInfo = (employeeId: string) => {
+    const employee = employees.find((e) => e._id === employeeId)
+    return {
+      name: employee?.name || 'Unassigned',
+      email: employee?.email || '',
+    }
   }
 
-  const columns: Column<Attendance>[] = [
-    { header: 'Employee', accessor: 'employeeName', sortable: true },
+  const columns: Column<Task>[] = [
     {
-      header: 'Status',
-      accessor: 'status',
+      header: 'Task',
+      accessor: 'title',
       cell: (row) => (
-        <Badge variant={row.status === 'present' ? 'success' : row.status === 'leave' ? 'outline' : 'destructive'}>
-          {row.status === 'present' ? '✓ Present' : row.status === 'leave' ? 'On Leave' : '✗ Absent'}
-        </Badge>
+        <div>
+          <p className="font-medium">{row.title}</p>
+          <p className="text-xs text-muted-foreground">{row.description}</p>
+        </div>
       ),
     },
     {
-      header: 'Check In',
-      accessor: 'checkInTime',
-      cell: (row) => row.checkInTime || '-',
+      header: 'Assigned To',
+      accessor: 'assignedTo',
+      cell: (row) => {
+        const assignee = getAssigneeInfo(row.assignedTo)
+        return (
+          <div className="flex items-center gap-2">
+            <Avatar className="h-7 w-7">
+              <AvatarFallback className="text-xs">{getInitials(assignee.name)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium">{assignee.name}</p>
+              <p className="text-xs text-muted-foreground">{assignee.email}</p>
+            </div>
+          </div>
+        )
+      },
     },
     {
-      header: 'Check Out',
-      accessor: 'checkOutTime',
-      cell: (row) => row.checkOutTime || '-',
+      header: 'Status',
+      accessor: 'status',
+      cell: (row) => <StatusBadge status={row.status} />,
+    },
+    {
+      header: 'Priority',
+      accessor: 'priority',
+      cell: (row) => (
+        <span
+          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+            row.priority === 'high'
+              ? 'bg-destructive/10 text-destructive'
+              : row.priority === 'medium'
+                ? 'bg-yellow-100/50 text-yellow-700'
+                : 'bg-green-100/50 text-green-700'
+          }`}
+        >
+          {row.priority.charAt(0).toUpperCase() + row.priority.slice(1)}
+        </span>
+      ),
+    },
+    {
+      header: 'Due Date',
+      accessor: 'dueDate',
+      cell: (row) => formatDate(row.dueDate),
+    },
+    {
+      header: 'Est. Hours',
+      accessor: 'estimatedHours',
+      cell: (row) => row.estimatedHours ? `${row.estimatedHours}h` : '—',
+    },
+    {
+      header: 'Actions',
+      accessor: '_id',
+      cell: (row) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(row)}
+            className="p-1.5 hover:bg-muted rounded transition-colors"
+          >
+            <Edit2 className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      ),
     },
   ]
 
   return (
-    <div className="space-y-6">
-      <PageHeader title="Attendance Management" subtitle="Track employee attendance and manage schedules.">
-        <Button onClick={() => setMarkDialogOpen(true)}><Plus className="h-4 w-4" /> Mark Attendance</Button>
-      </PageHeader>
+    <div>
+      <div className="flex items-center justify-between">
+        <PageHeader title="Tasks" subtitle="Assign and manage team tasks." />
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button
+              onClick={() => {
+                setEditingId(null)
+                reset()
+              }}
+              className="gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              New Task
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingId ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+              <DialogDescription>
+                {editingId ? 'Update task details' : 'Create a new task and assign it to an employee'}
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div>
+                <Label htmlFor="title">Task Title *</Label>
+                <Input
+                  id="title"
+                  placeholder="e.g., Fix login bug"
+                  className="mt-1.5"
+                  {...register('title')}
+                />
+                {errors.title && <p className="mt-1 text-xs text-destructive">{errors.title.message}</p>}
+              </div>
 
-      <div className="grid gap-4 sm:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Present Today</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold">{stats.present}</span>
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4">
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Detailed task description"
+                  rows={3}
+                  className="mt-1.5"
+                  {...register('description')}
+                />
+                {errors.description && <p className="mt-1 text-xs text-destructive">{errors.description.message}</p>}
+              </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Absent Today</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold">{stats.absent}</span>
-              <XCircle className="h-8 w-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="assignedTo">Assign To Employee *</Label>
+                  <select
+                    {...register('assignedTo')}
+                    className="mt-1.5 w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
+                  >
+                    <option value="">Select an employee</option>
+                    {employees.map((emp) => (
+                      <option key={emp._id} value={emp._id}>
+                        {emp.name} ({emp.email})
+                      </option>
+                    ))}
+                  </select>
+                  {errors.assignedTo && <p className="mt-1 text-xs text-destructive">{errors.assignedTo.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="status">Status</Label>
+                  <select
+                    {...register('status')}
+                    className="mt-1.5 w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
+                  >
+                    <option value="todo">To Do</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="review">Review</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+              </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">On Leave</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold">{stats.onLeave}</span>
-              <Clock className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="priority">Priority</Label>
+                  <select
+                    {...register('priority')}
+                    className="mt-1.5 w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="dueDate">Due Date *</Label>
+                  <Input
+                    id="dueDate"
+                    type="date"
+                    className="mt-1.5"
+                    {...register('dueDate')}
+                  />
+                  {errors.dueDate && <p className="mt-1 text-xs text-destructive">{errors.dueDate.message}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="estimatedHours">Est. Hours</Label>
+                  <Input
+                    id="estimatedHours"
+                    type="number"
+                    placeholder="8"
+                    step="0.5"
+                    className="mt-1.5"
+                    {...register('estimatedHours')}
+                  />
+                </div>
+              </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Not Marked</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold">{absentToday.length}</span>
-              <Calendar className="h-8 w-8 text-yellow-600" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="flex gap-3 justify-end pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsOpen(false)
+                    setEditingId(null)
+                    reset()
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Saving...' : editingId ? 'Update Task' : 'Create Task'}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Daily Attendance - {selectedDate}</CardTitle>
-            <Input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-40"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            columns={columns}
-            data={todayAttendance}
-            loading={loading}
-            searchPlaceholder="Search by employee..."
-            searchKeys={['employeeName']}
-            exportFileName="attendance"
-          />
-        </CardContent>
-      </Card>
-
-      <Dialog open={markDialogOpen} onOpenChange={setMarkDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Mark Attendance</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <FormField label="Employee">
-              <Select value={selectedEmployee?._id || ''} onValueChange={(id) => setSelectedEmployee(employees.find((e) => e._id === id) || null)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select employee" />
-                </SelectTrigger>
-                <SelectContent>
-                  {employees.filter((e) => e.isActive).map((emp) => (
-                    <SelectItem key={emp._id} value={emp._id}>{emp.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormField>
-
-            <FormField label="Status">
-              <Select value={status} onValueChange={(s) => setStatus(s as 'present' | 'absent')}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="present">Present</SelectItem>
-                  <SelectItem value="absent">Absent</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormField>
-
-            {status === 'present' && (
-              <>
-                <FormField label="Check In Time">
-                  <Input 
-                    type="time" 
-                    value={checkInTime} 
-                    onChange={(e) => setCheckInTime(e.target.value)} 
-                    placeholder="09:00"
-                  />
-                </FormField>
-                <FormField label="Check Out Time">
-                  <Input 
-                    type="time" 
-                    value={checkOutTime} 
-                    onChange={(e) => setCheckOutTime(e.target.value)} 
-                    placeholder="18:00"
-                  />
-                </FormField>
-              </>
-            )}
-
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setMarkDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleMarkAttendance}>Mark Attendance</Button>
-            </DialogFooter>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <div className="mt-5">
+        <DataTable
+          columns={columns}
+          data={tasks}
+          loading={loading}
+          searchPlaceholder="Search tasks..."
+          searchKeys={['title', 'description']}
+          exportFileName="tasks"
+        />
+      </div>
     </div>
   )
 }

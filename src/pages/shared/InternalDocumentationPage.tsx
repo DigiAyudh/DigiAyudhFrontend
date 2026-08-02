@@ -140,13 +140,13 @@ export default function InternalDocumentationPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader
         title="Internal Documentation"
         subtitle="System and process documentation for team members"
       />
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light" />
           <Input
@@ -177,22 +177,23 @@ export default function InternalDocumentationPage() {
                   {editingId ? 'Update the documentation' : 'Add new system or process documentation'}
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4">
-                <div className="space-y-2">
+              <div>
+                <div>
                   <Label htmlFor="title">Title *</Label>
                   <Input
                     id="title"
                     placeholder="Enter document title"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="mt-1.5"
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="mt-4">
                   <Label htmlFor="category">Category</Label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
+                    className="mt-1.5 w-full h-10 px-3 py-2 border border-border rounded-md bg-background"
                   >
                     <option value="system">System</option>
                     <option value="api">API</option>
@@ -201,7 +202,7 @@ export default function InternalDocumentationPage() {
                     <option value="other">Other</option>
                   </select>
                 </div>
-                <div className="space-y-2">
+                <div className="mt-4">
                   <Label htmlFor="content">Content *</Label>
                   <Textarea
                     id="content"
@@ -209,6 +210,7 @@ export default function InternalDocumentationPage() {
                     rows={8}
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    className="mt-1.5"
                   />
                 </div>
                 <div className="flex gap-3 justify-end pt-4">
@@ -226,13 +228,13 @@ export default function InternalDocumentationPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <Card>
+        <Card className="mt-5">
           <CardContent className="pt-6 text-center text-text-light">
             {search ? 'No documents found matching your search' : 'No internal documentation yet'}
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="mt-5 grid gap-4">
           {filtered.map((doc) => (
             <Card key={doc._id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">

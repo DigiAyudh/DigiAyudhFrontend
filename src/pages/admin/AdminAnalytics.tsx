@@ -41,10 +41,10 @@ export default function AdminAnalytics() {
   }, [dispatch])
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Analytics" subtitle="Growth, revenue and acquisition insights." />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <ChartCard title="Growth Trend" subtitle="Clients and projects over time">
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={growth} margin={{ left: -10, right: 8, top: 8 }}>

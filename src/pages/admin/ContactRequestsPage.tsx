@@ -65,17 +65,19 @@ export default function ContactRequestsPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Contact Requests" subtitle="Messages submitted through the website contact form." />
 
-      <DataTable
-        columns={columns}
-        data={requests}
-        loading={loading}
-        searchPlaceholder="Search requests..."
-        searchKeys={['name', 'email', 'subject', 'company']}
-        exportFileName="contact-requests"
-      />
+      <div className="mt-5">
+        <DataTable
+          columns={columns}
+          data={requests}
+          loading={loading}
+          searchPlaceholder="Search requests..."
+          searchKeys={['name', 'email', 'subject', 'company']}
+          exportFileName="contact-requests"
+        />
+      </div>
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <DialogContent className="max-w-lg">
@@ -83,27 +85,29 @@ export default function ContactRequestsPage() {
             <DialogTitle>{selected?.subject}</DialogTitle>
           </DialogHeader>
           {selected && (
-            <div className="space-y-4">
+            <div>
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div><p className="text-muted-foreground">Name</p><p className="font-medium">{selected.name}</p></div>
                 <div><p className="text-muted-foreground">Email</p><p className="font-medium">{selected.email}</p></div>
                 <div><p className="text-muted-foreground">Phone</p><p className="font-medium">{selected.phone || '—'}</p></div>
                 <div><p className="text-muted-foreground">Company</p><p className="font-medium">{selected.company || '—'}</p></div>
               </div>
-              <div>
+              <div className="mt-4">
                 <p className="mb-1 text-sm text-muted-foreground">Message</p>
                 <p className="rounded-lg bg-muted p-3 text-sm">{selected.message}</p>
               </div>
-              <FormField label="Update status">
-                <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {STATUSES.map((s) => (
-                      <SelectItem key={s} value={s} className="capitalize">{s.replace('-', ' ')}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormField>
+              <div className="mt-4">
+                <FormField label="Update status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {STATUSES.map((s) => (
+                        <SelectItem key={s} value={s} className="capitalize">{s.replace('-', ' ')}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormField>
+              </div>
             </div>
           )}
           <DialogFooter>
