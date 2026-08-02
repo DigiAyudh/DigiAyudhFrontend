@@ -103,10 +103,10 @@ export default function EmployeeDashboard() {
   }).slice(0, 3)
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title={`Hello, ${user?.name?.split(' ')[0] || 'there'}`} subtitle="Here's your workload for today." />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {loading && stats.length === 0
           ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)
           : stats.map((stat, i) => (
@@ -115,7 +115,7 @@ export default function EmployeeDashboard() {
       </div>
 
       {/* Attendance Card */}
-      <Card>
+      <Card className="mt-6">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5" />Attendance</CardTitle>
         </CardHeader>
@@ -158,7 +158,7 @@ export default function EmployeeDashboard() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
         <ChartCard title="Task Activity" subtitle="Completed vs added this week" className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={taskData} margin={{ left: -10, right: 8, top: 8 }}>
@@ -198,7 +198,7 @@ export default function EmployeeDashboard() {
       </div>
 
       {/* Documents Section */}
-      <Card>
+      <Card className="mt-6">
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Recent Documents</CardTitle>
           <Link to="/employee/documents" className="flex items-center gap-1 text-sm text-primary hover:underline">

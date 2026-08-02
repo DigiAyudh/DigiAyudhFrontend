@@ -83,7 +83,7 @@ export default function PublicCertificateVerification() {
               <p className="text-text-light">Verifying certificate...</p>
             </div>
           ) : certificate ? (
-            <div className="space-y-6">
+            <div>
               {/* Status Badge */}
               <div className="flex justify-center">
                 {isExpired ? (
@@ -98,7 +98,7 @@ export default function PublicCertificateVerification() {
               </div>
 
               {/* Certificate Details */}
-              <div className="bg-muted/50 rounded-lg p-6 space-y-4">
+              <div className="mt-6 bg-muted/50 rounded-lg p-6 space-y-4">
                 <div>
                   <p className="text-sm text-text-light mb-1">Credential Title</p>
                   <h2 className="text-2xl font-bold text-foreground">{certificate.title}</h2>
@@ -142,7 +142,7 @@ export default function PublicCertificateVerification() {
               </div>
 
               {/* Verification Information */}
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="mt-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
                 <div className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
@@ -155,7 +155,7 @@ export default function PublicCertificateVerification() {
               </div>
 
               {/* Verification Token */}
-              <div className="bg-muted p-4 rounded-lg">
+              <div className="mt-6 bg-muted p-4 rounded-lg">
                 <p className="text-xs text-text-light mb-2">Verification Token</p>
                 <p className="font-mono text-sm break-all text-foreground">{certificate.verificationToken}</p>
               </div>

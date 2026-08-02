@@ -16,8 +16,9 @@ export default function LeadsPage() {
   }, [dispatch])
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Leads" subtitle="Sales pipeline and prospective clients." />
+      <div className="mt-6">
       <DataTable<Lead>
         data={leads}
         loading={loading}
@@ -33,6 +34,7 @@ export default function LeadsPage() {
           { header: 'Status', accessor: 'status', cell: (r) => <StatusBadge status={r.status} /> },
         ]}
       />
+      </div>
     </div>
   )
 }

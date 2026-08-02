@@ -146,13 +146,13 @@ export default function MyTasksPage() {
   const totalCount = myTodos.length
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader
         title="My Tasks"
         subtitle="View and manage your assigned tasks and to-do list"
       />
 
-      <Tabs defaultValue="tasks" className="space-y-4">
+      <Tabs defaultValue="tasks" className="mt-6 space-y-4">
         <TabsList>
           <TabsTrigger value="tasks">Assigned Tasks ({myTasks.length})</TabsTrigger>
           <TabsTrigger value="todos">

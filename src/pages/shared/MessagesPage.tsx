@@ -48,10 +48,10 @@ export default function MessagesPage() {
     c.isGroup ? c.groupName || 'Group' : c.participantNames.find((n) => n !== user?.name) || c.participantNames[0]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Messages" subtitle="Chat with your team and clients." />
 
-      <Card className="grid h-[calc(100vh-14rem)] grid-cols-1 overflow-hidden md:grid-cols-[280px_1fr]">
+      <Card className="mt-6 grid h-[calc(100vh-14rem)] grid-cols-1 overflow-hidden md:grid-cols-[280px_1fr]">
         {/* Chat list */}
         <div className="border-r border-border">
           <div className=" border-border p-3">

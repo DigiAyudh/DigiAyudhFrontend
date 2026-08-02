@@ -28,18 +28,19 @@ export default function MeetingsPage() {
     dispatch(fetchMeetings(user?._id))
   }, [dispatch, user?._id])
 
-  const sorted = [...meetings].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+  const meetingsList = Array.isArray(meetings) ? meetings.filter((m) => m && m.start) : []
+  const sorted = [...meetingsList].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Meetings" subtitle="Your scheduled calls and appointments." />
 
       {loading && meetings.length === 0 ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div>
+        <div className="mt-6 space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div>
       ) : sorted.length === 0 ? (
-        <EmptyState icon={<Calendar className="h-6 w-6" />} title="No meetings scheduled" description="New meetings will appear here." />
+        <div className="mt-6"><EmptyState icon={<Calendar className="h-6 w-6" />} title="No meetings scheduled" description="New meetings will appear here." /></div>
       ) : (
-        <div className="space-y-3">
+        <div className="mt-6 space-y-3">
           {sorted.map((m) => (
             <Card key={m._id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setShowDetails(m)}>
               <CardContent className="flex flex-wrap items-center gap-4 p-4">

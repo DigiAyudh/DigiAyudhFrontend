@@ -22,17 +22,17 @@ export default function MyClientsPage() {
   const mine = clients.filter((c) => c.verificationStatus === 'verified' && (!c.assignedEmployeeId || c.assignedEmployeeId === user?._id))
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="My Clients" subtitle="Clients assigned to you." />
 
       {loading && clients.length === 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-40" />)}
         </div>
       ) : mine.length === 0 ? (
-        <EmptyState icon={<Building2 className="h-6 w-6" />} title="No clients assigned" description="Verified clients assigned to you will appear here." />
+        <div className="mt-6"><EmptyState icon={<Building2 className="h-6 w-6" />} title="No clients assigned" description="Verified clients assigned to you will appear here." /></div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {mine.map((c) => (
             <Card key={c._id}>
               <CardContent className="space-y-3 p-5">

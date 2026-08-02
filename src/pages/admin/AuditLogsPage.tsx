@@ -126,8 +126,9 @@ export default function AuditLogsPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Audit Logs" subtitle="A chronological record of system activity with edit and delete capabilities." />
+      <div className="mt-6">
       <DataTable
         columns={columns}
         data={logs}
@@ -136,6 +137,7 @@ export default function AuditLogsPage() {
         exportFileName="audit-logs"
         pageSize={12}
       />
+      </div>
     </div>
   )
 }

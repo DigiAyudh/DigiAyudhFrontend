@@ -314,7 +314,7 @@ export default function AdminPortfolioPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader
         title="Portfolio Management"
         subtitle="Manage projects, reviews and featured content"
@@ -325,7 +325,7 @@ export default function AdminPortfolioPage() {
         </Button>
       </PageHeader>
 
-      <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mt-6">
         <TabsList>
           <TabsTrigger value="projects" className="gap-2">
             <ImageIcon className="h-4 w-4" />

@@ -76,9 +76,10 @@ export default function ClientsPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Clients" subtitle="All registered clients and their account managers." />
 
+      <div className="mt-6">
       <DataTable
         columns={columns}
         data={clients}
@@ -87,6 +88,7 @@ export default function ClientsPage() {
         searchKeys={['name', 'email', 'companyName']}
         exportFileName="clients"
       />
+      </div>
 
       <Dialog open={!!assignTarget} onOpenChange={(o) => !o && setAssignTarget(null)}>
         <DialogContent className="max-w-md">

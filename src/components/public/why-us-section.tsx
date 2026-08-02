@@ -16,7 +16,7 @@ export function WhyUsSection() {
               align="left"
             />
 
-            <ul className="mt-10 space-y-6">
+            <ul className="mt-10">
               {whyUsPoints.map((point, i) => (
                 <motion.li
                   key={point.title}
@@ -24,7 +24,7 @@ export function WhyUsSection() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex gap-4"
+                  className={i === 0 ? 'flex gap-4' : 'mt-6 flex gap-4'}
                 >
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400">
                     <Check className="size-4" />

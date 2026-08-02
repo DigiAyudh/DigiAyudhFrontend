@@ -22,15 +22,16 @@ export default function AttendancePage() {
   const rate = attendance.length ? Math.round((present / attendance.length) * 100) : 0
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Attendance" subtitle="Your attendance history and stats." />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <StatCard stat={{ label: 'Present Days', value: present, change: 0, trend: 'up' }} icon={CalendarCheck} index={0} />
         <StatCard stat={{ label: 'Late Arrivals', value: late, change: 0, trend: 'down' }} icon={Clock} index={1} />
         <StatCard stat={{ label: 'Attendance Rate', value: rate, change: 0, trend: 'up', format: 'percent' }} icon={TrendingUp} index={2} />
       </div>
 
+      <div className="mt-6">
       <DataTable<Attendance>
         data={attendance}
         loading={loading}
@@ -45,6 +46,7 @@ export default function AttendancePage() {
           { header: 'Status', accessor: 'status', cell: (r) => <StatusBadge status={r.status} /> },
         ]}
       />
+      </div>
     </div>
   )
 }

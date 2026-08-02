@@ -125,7 +125,7 @@ export default function CertificatesPage() {
   const expiredCount = certificates.filter(c => isExpired(c.expiryDate)).length
 
   return (
-    <div className="space-y-6">
+    <div>
       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="p-4 flex gap-3">
           <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
@@ -136,7 +136,7 @@ export default function CertificatesPage() {
       </Card>
 
       {error && (
-        <Card className="border-destructive/30 bg-destructive/5">
+        <Card className="mt-6 border-destructive/30 bg-destructive/5">
           <CardContent className="p-4 flex gap-3">
             <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
             <div className="flex-1">
@@ -147,7 +147,7 @@ export default function CertificatesPage() {
         </Card>
       )}
 
-      <div className="flex items-center justify-between">
+      <div className="mt-6 flex items-center justify-between">
         <PageHeader
           title="Certificates & Experience Letters"
           subtitle="Manage and verify employee credentials and certifications"
@@ -226,7 +226,7 @@ export default function CertificatesPage() {
         </Dialog>
       </div>
 
-      <Tabs defaultValue="active" className="space-y-4">
+      <Tabs defaultValue="active" className="mt-6 space-y-4">
         <TabsList>
           <TabsTrigger value="active">Active ({activeCount})</TabsTrigger>
           <TabsTrigger value="expired">Expired ({expiredCount})</TabsTrigger>

@@ -63,9 +63,9 @@ export function Sidebar({
           </button>
         </div>
 
-        <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
-          {sections.map((section) => (
-            <div key={section.title}>
+        <nav className="flex-1 overflow-y-auto px-3 py-5">
+          {sections.map((section, i) => (
+            <div key={section.title} className={i === 0 ? undefined : 'mt-6'}>
               <p className="px-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                 {section.title}
               </p>

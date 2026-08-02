@@ -181,7 +181,8 @@ dispatch(fetchClients(user?.companyName))
     )
   }
 
-  const sorted = [...meetings].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+  const meetingsList = Array.isArray(meetings) ? meetings.filter((m) => m && m.start) : []
+  const sorted = [...meetingsList].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
 
   return (
     <div>

@@ -102,10 +102,10 @@ export default function VerificationPage() {
     )
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Client Verification" subtitle="Review and approve new client registrations." />
 
-      <Tabs defaultValue="pending">
+      <Tabs defaultValue="pending" className="mt-6">
         <TabsList>
           <TabsTrigger value="pending">Pending ({pending.length})</TabsTrigger>
           <TabsTrigger value="verified">Verified ({verified.length})</TabsTrigger>

@@ -172,7 +172,7 @@ export default function ProjectsPage({ basePath }: Props) {
   )
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="flex items-center justify-between">
         <PageHeader title="Projects" subtitle="Browse and track all projects." />
         {canManageProjects && (
@@ -323,17 +323,17 @@ export default function ProjectsPage({ basePath }: Props) {
         placeholder="Search projects..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="max-w-sm"
+        className="mt-6 max-w-sm"
       />
 
       {loading && projects.length === 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <EmptyState icon={<FolderKanban className="h-6 w-6" />} title="No projects found" description="Try adjusting your search or check back later." />
+        <div className="mt-6"><EmptyState icon={<FolderKanban className="h-6 w-6" />} title="No projects found" description="Try adjusting your search or check back later." /></div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
             <Card
               key={p._id}

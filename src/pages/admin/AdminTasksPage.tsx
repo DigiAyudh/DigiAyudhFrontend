@@ -226,9 +226,8 @@ export default function AdminTasksPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageHeader title="Tasks" subtitle="Assign and manage team tasks." />
+    <div>
+      <PageHeader title="Tasks" subtitle="Assign and manage team tasks.">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button
@@ -353,8 +352,9 @@ export default function AdminTasksPage() {
             </form>
           </DialogContent>
         </Dialog>
-      </div>
+      </PageHeader>
 
+      <div className="mt-6">
       <DataTable
         columns={columns}
         data={tasks}
@@ -364,6 +364,7 @@ export default function AdminTasksPage() {
         exportFileName="tasks"
         
       />
+      </div>
     </div>
   )
 }

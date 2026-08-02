@@ -25,10 +25,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Settings" subtitle="Customize your experience." />
 
-      <Card>
+      <Card className="mt-6">
         <CardHeader><CardTitle>Appearance</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div>

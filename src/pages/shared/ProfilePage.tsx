@@ -161,10 +161,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="My Profile" subtitle="Manage your personal information." />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
             <div className="relative">

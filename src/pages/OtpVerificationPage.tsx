@@ -102,14 +102,14 @@ export default function OtpVerificationPage() {
                     dark:from-zinc-950 dark:to-zinc-900">
 
       <Card className="w-full max-w-md shadow-2xl dark:shadow-zinc-950/50 border border-zinc-200 dark:border-zinc-800">
-        <CardHeader className="space-y-6 text-center">
+        <CardHeader className="text-center">
           <img
             src="/DigiAyudhlogo.jpeg"
             alt="logo"
             className="mx-auto h-16 w-16 rounded-2xl shadow-sm"
           />
 
-          <div>
+          <div className="mt-6">
             <CardTitle className="text-3xl font-bold tracking-tight">
               Verify Your Email
             </CardTitle>
@@ -118,7 +118,7 @@ export default function OtpVerificationPage() {
             </CardDescription>
           </div>
 
-          <p className="font-semibold text-lg text-primary break-all">
+          <p className="mt-6 font-semibold text-lg text-primary break-all">
             {email}
           </p>
         </CardHeader>

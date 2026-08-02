@@ -20,7 +20,7 @@ export default function NotificationsPage() {
   }, [dispatch, user?._id])
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader title="Notifications" subtitle={`${unreadCount} unread`}>
         {unreadCount > 0 && (
           <Button variant="outline" onClick={() => user?._id && dispatch(markAllAsRead(user._id))}>
@@ -30,11 +30,11 @@ export default function NotificationsPage() {
       </PageHeader>
 
       {loading && notifications.length === 0 ? (
-        <div className="space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+        <div className="mt-6 space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
       ) : notifications.length === 0 ? (
-        <EmptyState icon={<Bell className="h-6 w-6" />} title="No notifications" description="You're all caught up." />
+        <div className="mt-6"><EmptyState icon={<Bell className="h-6 w-6" />} title="No notifications" description="You're all caught up." /></div>
       ) : (
-        <div className="space-y-2">
+        <div className="mt-6 space-y-2">
           {notifications.map((n) => (
             <Card key={n._id} className={cn(!n.isRead && 'border-primary/40 bg-primary/5')}>
               <CardContent className="flex items-start gap-3 p-4">

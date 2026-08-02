@@ -77,10 +77,10 @@ export default function ProjectDetail() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <Button variant="ghost" onClick={() => navigate(-1)} className="-ml-2"><ArrowLeft className="mr-2 h-4 w-4" /> Back to projects</Button>
 
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-balance">{project.title}</h1>
@@ -90,7 +90,7 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Card><CardContent className="flex items-center gap-3 p-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary"><Calendar className="h-5 w-5" /></div>
           <div><p className="text-xs text-text-light">Timeline</p><p className="text-sm font-medium">{formatDate(project.startDate)} - {formatDate(project.endDate)}</p></div>
@@ -105,14 +105,14 @@ export default function ProjectDetail() {
         </CardContent></Card>
       </div>
 
-      <Card>
+      <Card className="mt-6">
         <CardContent className="space-y-2 p-5">
           <div className="flex justify-between text-sm"><span className="font-medium">Overall progress</span><span>{projectProgress(project.status)}%</span></div>
           <Progress value={projectProgress(project.status)} />
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="tasks">
+      <Tabs defaultValue="tasks" className="mt-6">
         <TabsList>
           <TabsTrigger value="tasks">Tasks ({projectTasks.length})</TabsTrigger>
           <TabsTrigger value="documents">Documents & Links ({visibleDocs.length})</TabsTrigger>

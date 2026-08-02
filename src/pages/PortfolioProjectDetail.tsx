@@ -316,7 +316,7 @@ export default function PortfolioProjectDetail() {
             </div>
 
             {/* Right Column - Sidebar */}
-            <div className="space-y-6">
+            <div>
               {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -357,6 +357,7 @@ export default function PortfolioProjectDetail() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
+                className="mt-6"
               >
                 <Card>
                   <CardContent className="p-6">
@@ -384,6 +385,7 @@ export default function PortfolioProjectDetail() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
+                className="mt-6"
               >
                 <Card>
                   <CardContent className="p-6 space-y-4">
@@ -424,6 +426,7 @@ export default function PortfolioProjectDetail() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 }}
+                  className="mt-6"
                 >
                   <Card>
                     <CardContent className="p-6">

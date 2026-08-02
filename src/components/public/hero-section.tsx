@@ -45,7 +45,7 @@ export function HeroSection() {
 
               {/* Premium Shine */}
               <motion.div
-                className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12"
+                className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-primary/20 to-transparent -skew-x-12"
                 animate={{
                   x: ["-150%", "450%"],
                 }}
@@ -72,7 +72,7 @@ export function HeroSection() {
                   <Sparkles className="h-4 w-4 text-yellow-400" />
                 </motion.div>
 
-                <span className="bg-gradient-to-r from-white via-slate-100 to-purple-200 bg-clip-text text-sm font-semibold tracking-wide text-transparent">
+                <span className="bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-sm font-semibold tracking-wide text-transparent">
                   {APP_CONFIG.tagline}
                 </span>
               </div>

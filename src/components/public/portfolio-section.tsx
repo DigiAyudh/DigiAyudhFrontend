@@ -107,7 +107,7 @@ const allImages = [
       <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors mb-4 w-fit">
         <ArrowLeft className="h-4 w-4" /> Back to all projects
       </button>
-      <div className="flex-1 overflow-y-auto space-y-6 pr-1">
+      <div className="flex-1 overflow-y-auto pr-1">
         <div className="relative overflow-hidden rounded-xl border border-border bg-card">
           <div className="relative aspect-video lg:aspect-[21/9]">
             {allImages.length > 0 ? (
@@ -143,13 +143,13 @@ const allImages = [
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap gap-3">
           {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"><Button size="sm" className="gap-2"><ExternalLink className="h-4 w-4" /> View Live Project</Button></a>}
           {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"><Button variant="outline" size="sm" className="gap-2"><GitBranch className="h-4 w-4" /> View Source Code</Button></a>}
         </div>
 
         {project.technologyStack.length > 0 && (
-          <div>
+          <div className="mt-6">
             <h3 className="text-sm font-semibold mb-2">Technologies Used</h3>
             <div className="flex flex-wrap gap-2">
               {project.technologyStack.map((tech) => (
@@ -159,7 +159,7 @@ const allImages = [
           </div>
         )}
 
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+        <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-3.5 w-3.5" />
             <span>{new Date(project.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -173,7 +173,7 @@ const allImages = [
           )}
         </div>
 
-        <div>
+        <div className="mt-6">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-lg font-semibold">
               Client Review{reviews.length > 0 && <span className="ml-1.5 text-sm text-muted-foreground font-normal">({reviews.length})</span>}
