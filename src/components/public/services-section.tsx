@@ -1,4 +1,6 @@
 import {
+  Bot,
+  Workflow,
   Briefcase,
   Building2,
   Cloud,
@@ -10,7 +12,6 @@ import {
   Sparkles,
   UserCheck,
   Users,
-  Workflow,
   type LucideIcon,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -20,6 +21,7 @@ import { services } from '@/constants/landing.data';
 import { cn } from '@/lib/utils';
 
 const iconMap: Record<string, LucideIcon> = {
+  Bot,
   Globe,
   LayoutDashboard,
   Smartphone,
@@ -30,7 +32,6 @@ const iconMap: Record<string, LucideIcon> = {
   Briefcase,
   Sparkles,
   Cloud,
-  Workflow,
   Rocket,
 };
 
@@ -67,10 +68,16 @@ export function ServicesSection() {
                 className="group relative rounded-2xl border border-border bg-card p-6 transition-all hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5"
               >
                 {service.badge && (
-                  <Badge variant="brand" className="absolute right-4 top-4">
-                    {service.badge}
-                  </Badge>
-                )}
+  <Badge
+    variant="brand"
+    className={cn(
+      "absolute right-4 top-4 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] border shadow-lg backdrop-blur-md transition-all duration-300 group-hover:scale-105",
+      accentMap[service.accent]
+    )}
+  >
+    {service.badge}
+  </Badge>
+)}
 
                 <div
                   className={cn(

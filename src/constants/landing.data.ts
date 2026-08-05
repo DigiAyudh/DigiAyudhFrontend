@@ -10,6 +10,16 @@ import type {
 } from '@/types/domain.types';
 
 export const services: Service[] = [
+ {
+  id: 'ai-automation',
+  title: 'AI Automation',
+  description:'Automate your business with AI-powered agents, smart workflows, customer support, lead management, and seamless integrations.',
+  icon: 'Bot',
+  features: ['AI Agents', 'WhatsApp, Email, CRM & Workflow Automation', '24/7 AI Support',
+  ],
+  badge: 'Trending ',
+  accent: 'amber',
+},
   {
     id: 'websites',
     title: 'Business Websites',
@@ -101,15 +111,6 @@ export const services: Service[] = [
     icon: 'Cloud',
     features: ['MVP development', 'Subscription billing', 'Multi-tenant architecture'],
     accent: 'cyan',
-  },
-  {
-    id: 'automation',
-    title: 'Business Automation',
-    description:
-      'Custom tools that eliminate busywork and connect your entire business stack.',
-    icon: 'Workflow',
-    features: ['Workflow engines', 'Integration hubs', 'Scheduled jobs'],
-    accent: 'amber',
   },
   {
     id: 'transformation',
