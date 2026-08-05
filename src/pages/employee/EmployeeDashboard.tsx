@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FolderKanban, ListTodo, CheckCircle2, UserCheck, ArrowRight, LogIn, LogOut, Clock, FileText, Download } from 'lucide-react'
+import { FolderKanban, ListTodo, CheckCircle2, UserCheck, ArrowRight, LogIn, LogOut, Clock, FileText, Download, LifeBuoy } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
@@ -9,6 +9,10 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchDashboardStats } from '../../redux/slices/dashboardSlice'
 import { fetchProjects } from '../../redux/slices/projectsSlice'
 import { fetchDocuments } from '../../redux/slices/businessSlice'
+import { fetchTickets } from '../../redux/slices/supportSlice'
+import { fetchSportTickets } from '../../redux/slices/sportSlice'
+import { fetchClients } from '../../redux/slices/clientsSlice'
+import { formatRelativeTime } from '../../utils/helpers'
 import { PageHeader } from '../../components/common/PageHeader'
 import { StatCard } from '../../components/common/StatCard'
 import { ChartCard } from '../../components/common/ChartCard'
@@ -34,6 +38,9 @@ export default function EmployeeDashboard() {
   const { stats, loading } = useAppSelector((s) => s.dashboard)
   const { projects } = useAppSelector((s) => s.projects)
   const { documents } = useAppSelector((s) => s.business)
+  const { tickets } = useAppSelector((s) => s.support)
+  const { tickets: sportTickets } = useAppSelector((s) => s.sport)
+  const { clients } = useAppSelector((s) => s.clients)
   const { user } = useAppSelector((s) => s.auth)
   const [todayAttendance, setTodayAttendance] = useState<any>(null)
   const [isSubmittingAttendance, setIsSubmittingAttendance] = useState(false)
@@ -42,6 +49,9 @@ export default function EmployeeDashboard() {
     dispatch(fetchDashboardStats('employee'))
     dispatch(fetchProjects())
     dispatch(fetchDocuments())
+    dispatch(fetchTickets())
+    dispatch(fetchSportTickets())
+    dispatch(fetchClients())
     fetchTodayAttendance()
   }, [dispatch])
 
@@ -94,13 +104,21 @@ export default function EmployeeDashboard() {
     }
   }
 
-  // Get documents for employee's assigned projects
+// Get documents for employee's assigned projects
   const employeeDocuments = documents.filter((doc) => {
     const assignedProjectIds = projects
       .filter((p) => (p.teamMembers || []).includes(user?._id || ''))
       .map((p) => p._id)
     return assignedProjectIds.includes(doc.projectId || '')
   }).slice(0, 3)
+
+  // Get support tickets for the employee's assigned clients
+  const myClientIds = clients
+    .filter((c) => c.verificationStatus === 'verified' && c.assignedEmployeeId === user?._id)
+    .map((c) => c._id)
+  const myClientTickets = [...tickets, ...sportTickets]
+    .filter((t: any) => t && t._id && (myClientIds.includes(t.clientId) || t.assignedTo === user?._id))
+    .slice(0, 5)
 
   return (
     <div>
@@ -196,6 +214,36 @@ export default function EmployeeDashboard() {
           </CardContent>
         </Card>
       </div>
+
+{/* Support Tickets Section */}
+      <Card className="mt-6">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2"><LifeBuoy className="h-5 w-5" />Client Support Tickets</CardTitle>
+          <Link to="/employee/sport-tickets" className="flex items-center gap-1 text-sm text-primary hover:underline">
+            View all <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {myClientTickets.length > 0 ? (
+            myClientTickets.map((t: any, idx: number) => (
+              <div key={t._id || idx} className="flex items-center justify-between">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{t.subject}</p>
+                  <p className="truncate text-xs text-text-light">
+                    {t.createdByName || t.clientName || 'Client'} · {t.projectName || t.category || 'General'} · {formatRelativeTime(t.createdAt)}
+                  </p>
+                </div>
+                <div className="ml-3 flex items-center gap-2">
+                  <StatusBadge status={t.priority || t.status} />
+                  <StatusBadge status={t.status} />
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="py-4 text-center text-sm text-text-light">No support tickets from your clients</p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Documents Section */}
       <Card className="mt-6">

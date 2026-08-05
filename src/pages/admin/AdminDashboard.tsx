@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, UserCheck, FolderKanban, DollarSign, ArrowRight, Clock, FileText, Download } from 'lucide-react'
+import { Users, UserCheck, FolderKanban, DollarSign, ArrowRight, Clock, FileText, Download, LifeBuoy } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -11,6 +11,8 @@ import { fetchProjects } from '../../redux/slices/projectsSlice'
 import { fetchContactRequests } from '../../redux/slices/contactSlice'
 import { fetchClients } from '../../redux/slices/clientsSlice'
 import { fetchDocuments } from '../../redux/slices/businessSlice'
+import { fetchTickets } from '../../redux/slices/supportSlice'
+import { fetchSportTickets } from '../../redux/slices/sportSlice'
 import { PageHeader } from '../../components/common/PageHeader'
 import { StatCard } from '../../components/common/StatCard'
 import { ChartCard } from '../../components/common/ChartCard'
@@ -40,6 +42,8 @@ export default function AdminDashboard() {
   const { requests } = useAppSelector((s) => s.contact)
   const { clients } = useAppSelector((s) => s.clients)
   const { documents } = useAppSelector((s) => s.business)
+  const { tickets } = useAppSelector((s) => s.support)
+  const { tickets: sportTickets } = useAppSelector((s) => s.sport)
 
   useEffect(() => {
     dispatch(fetchDashboardStats('admin'))
@@ -47,6 +51,8 @@ export default function AdminDashboard() {
     dispatch(fetchContactRequests())
     dispatch(fetchClients())
     dispatch(fetchDocuments())
+    dispatch(fetchTickets())
+    dispatch(fetchSportTickets())
   }, [dispatch])
 
   const statusCounts = projects.reduce<Record<string, number>>((acc, p) => {
@@ -57,6 +63,9 @@ export default function AdminDashboard() {
   const pendingClients = clients.filter((c) => c.verificationStatus === 'pending')
   const newRequests = requests.filter((r) => r.status === 'new')
   const recentDocuments = documents.slice(0, 3)
+  const recentTickets = [...tickets, ...sportTickets]
+    .filter((t) => !t || typeof t !== 'object' || t._id)
+    .slice(0, 5)
 
   return (
     <div>
@@ -154,6 +163,36 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Support Tickets Section */}
+      <Card className="mt-5">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2"><LifeBuoy className="h-5 w-5" />Recent Support Tickets</CardTitle>
+          <Link to="/admin/sport-tickets" className="flex items-center gap-1 text-sm text-primary hover:underline">
+            View all <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent>
+          {recentTickets.length > 0 ? (
+            recentTickets.map((t: any, idx: number) => (
+              <div key={t._id || idx} className={`flex items-center justify-between ${idx > 0 ? 'mt-4' : ''}`}>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{t.subject}</p>
+                  <p className="truncate text-xs text-text-light">
+                    {t.createdByName || t.clientName || 'Client'} · {t.projectName || t.category || 'General'} · {formatRelativeTime(t.createdAt)}
+                  </p>
+                </div>
+                <div className="ml-3 flex items-center gap-2">
+                  <StatusBadge status={t.priority || t.status} />
+                  <StatusBadge status={t.status} />
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="py-4 text-center text-sm text-text-light">No support tickets yet</p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Recent Documents Section */}
       <Card className="mt-5">

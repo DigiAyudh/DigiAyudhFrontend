@@ -30,7 +30,7 @@ type ContactForm = z.infer<typeof schema>
 const details = [
   { icon: Mail, label: 'Email', value: 'hello@digiayudh.com' },
   { icon: Phone, label: 'Phone', value: '+91 9109442020' },
-  { icon: MapPin, label: 'Office', value: 'Indore, Madhya Pradesh · Remote-first' },
+  { icon: MapPin, label: 'Office', value: 'Shekhar Tower Vijay Nagar, Indore, Madhya Pradesh 452010' },
 ]
 
 export function ContactSection() {

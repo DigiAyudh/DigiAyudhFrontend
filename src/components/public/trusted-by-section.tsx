@@ -61,19 +61,17 @@ export function TrustedBySection() {
     }}
   >
     {[...trustedClients, ...trustedClients].map((client, index) => (
-      <div
-        key={`${client.id}-${index}`}
-        className="group flex h-24 min-w-[180px] flex-col items-center justify-center rounded-2xl border border-border/60 bg-card/60 px-6 backdrop-blur-md transition-all duration-300 hover:border-purple-500/30 hover:bg-card hover:shadow-lg hover:shadow-purple-500/10"
-      >
-        <span className="mb-2 text-2xl transition-transform duration-300 group-hover:scale-110">
-          {client.logo}
-        </span>
-
-        <span className="text-sm font-semibold text-muted-foreground transition-colors group-hover:text-foreground">
-          {client.name}
-        </span>
-      </div>
-    ))}
+  <div
+    key={`${client.id}-${index}`}
+    className="group flex shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-md transition-all duration-300 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10"
+  >
+    <img
+      src={client.logo}
+      alt={client.name}
+      className="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+    />
+  </div>
+))}
   </motion.div>
 </div>
 

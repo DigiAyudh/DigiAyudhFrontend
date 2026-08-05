@@ -386,9 +386,40 @@ deleteProject(id: string) {
     return this.client.put(`/support/${id}`, data)
   }
 
-  // Audit logs
+// Audit logs
   getAuditLogs() {
     return this.client.get('/audit-logs')
+  }
+
+  // Sport Tickets
+  getSportTickets(clientId?: string) {
+    return this.client.get(clientId ? `/sport-tickets?clientId=${clientId}` : '/sport-tickets')
+  }
+  getSportTicketById(id: string) {
+    return this.client.get(`/sport-tickets/${id}`)
+  }
+  createSportTicket(data: Record<string, unknown>) {
+    return this.client.post('/sport-tickets', data)
+  }
+  replySportTicket(id: string, message: string, screenshots?: string[]) {
+    return this.client.post(`/sport-tickets/${id}/reply`, { message, screenshots })
+  }
+  updateSportTicket(id: string, data: Record<string, unknown>) {
+    return this.client.put(`/sport-tickets/${id}`, data)
+  }
+  deleteSportTicket(id: string) {
+    return this.client.delete(`/sport-tickets/${id}`)
+  }
+
+  // Sport Tokens
+  getSportTokens(clientId?: string) {
+    return this.client.get(clientId ? `/sport-tokens?clientId=${clientId}` : '/sport-tokens')
+  }
+  updateSportToken(id: string, data: Record<string, unknown>) {
+    return this.client.put(`/sport-tokens/${id}`, data)
+  }
+  createSportToken(data: Record<string, unknown>) {
+    return this.client.post('/sport-tokens', data)
   }
 
   // Attendance

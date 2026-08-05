@@ -35,6 +35,7 @@ import AdminAttendancePage from './pages/admin/AttendancePage'
 import AdminLeaveRequestsPage from './pages/admin/LeaveRequestsPage'
 import CertificatesPage from './pages/admin/CertificatesPage'
 import AdminPortfolioPage from './pages/admin/AdminPortfolioPage'
+import AdminSportTicketsPage from './pages/admin/SportTicketsPage'
 import InternalDocumentationPage from './pages/shared/InternalDocumentationPage'
 
 // Employee pages
@@ -43,14 +44,15 @@ import LeadsPage from './pages/employee/LeadsPage'
 import AttendancePage from './pages/employee/AttendancePage'
 import MyClientsPage from './pages/employee/MyClientsPage'
 import MyTasksPage from './pages/employee/MyTasksPage'
+import EmployeeSportTicketsPage from './pages/employee/SportTicketsPage'
 
 // Client pages
 import ClientDashboard from './pages/client/ClientDashboard'
+import ClientSportPage from './pages/client/ClientSportPage'
 
 // Shared pages
 import ProjectsPage from './pages/shared/ProjectsPage'
 import ProjectDetail from './pages/shared/ProjectDetail'
-import TaskBoard from './pages/shared/TaskBoard'
 import MeetingsPage from './pages/shared/MeetingsPage'
 import InvoicesPage from './pages/shared/InvoicesPage'
 import DocumentsPage from './pages/shared/DocumentsPage'
@@ -100,8 +102,9 @@ function App() {
                 <Route path="attendance" element={<AdminAttendancePage />} />
                 <Route path="leave-requests" element={<AdminLeaveRequestsPage />} />
                 <Route path="contact-requests" element={<ContactRequestsPage />} />
-                <Route path="portfolio" element={<AdminPortfolioPage />} />
+<Route path="portfolio" element={<AdminPortfolioPage />} />
                 <Route path="invoices" element={<InvoicesPage />} />
+                <Route path="sport-tickets" element={<AdminSportTicketsPage />} />
                 <Route path="audit-logs" element={<AuditLogsPage />} />
                 <Route path="certificates" element={<CertificatesPage />} />
                 <Route path="documents" element={<DocumentsPage />} />
@@ -125,8 +128,9 @@ function App() {
                 <Route index element={<EmployeeDashboard />} />
                 <Route path="projects" element={<ProjectsPage basePath="/employee/projects" />} />
                 <Route path="projects/:id" element={<ProjectDetail />} />
-                <Route path="tasks" element={<TaskBoard />} />
+                <Route path="tasks" element={<Navigate to="/employee/my-tasks" replace />} />
                 <Route path="my-tasks" element={<MyTasksPage />} />
+                <Route path="sport-tickets" element={<EmployeeSportTicketsPage />} />
                 <Route path="clients" element={<MyClientsPage />} />
                 <Route path="leads" element={<LeadsPage />} />
                 <Route path="calendar" element={<MeetingsPage />} />
@@ -151,10 +155,11 @@ function App() {
                 <Route index element={<ClientDashboard />} />
                 <Route path="projects" element={<ProjectsPage basePath="/client/projects" />} />
                 <Route path="projects/:id" element={<ProjectDetail />} />
-                <Route path="invoices" element={<InvoicesPage />} />
+<Route path="invoices" element={<InvoicesPage />} />
                 <Route path="documents" element={<DocumentsPage />} />
                 <Route path="meetings" element={<MeetingsPage />} />
                 <Route path="support" element={<SupportPage />} />
+                <Route path="sport" element={<ClientSportPage />} />
                 <Route path="messages" element={<MessagesPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="profile" element={<ProfilePage />} />

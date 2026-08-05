@@ -290,31 +290,23 @@ export const testimonial: Testimonial = {
 
 
 export const trustedClients: Client[] = [
-  {
-    id: "1",
-    name: "Northstar",
-    logo: "",
-  },
-  {
-    id: "2",
-    name: "Vertex",
-    logo: "/logos/vertex.png",
-  },
-  {
-    id: "3",
-    name: "Pulse",
-    logo: "/logos/pulse.png",
-  },
-  {
-    id: "4",
-    name: "Mono",
-    logo: "/logos/mono.png",
-  },
-  {
-    id: "5",
-    name: "Kinetic",
-    logo: "/logos/kinetic.png",
-  },
+
+  
+  { id: '1', name: 'Ananthaa Global Ventures', logo: '/agv_logo.png' },
+  { id: '2', name: 'Vertex', logo: '/vertex.png' },
+  { id: '3', name: 'Pulse', logo: '/pulse.png' },
+  { id: '4', name: 'Mono', logo: '/mono.png' },
+  { id: '5', name: 'Kinetic', logo: '/kinetic.png' },
+  { id: '6', name: 'Nexora', logo: '/nexora.png' },
+  { id: '7', name: 'Fluxwave', logo: '/fluxwave.png' },
+  { id: '8', name: 'Ironclad', logo: '/ironclad.png' },
+  { id: '9', name: 'Orbitly', logo: '/orbitly.png' },
+  { id: '10', name: 'Zenith', logo: '/zenith.png' },
+  { id: '11', name: 'Cobalt', logo: '/cobalt.png' },
+  { id: '12', name: 'Solace', logo: '/solace.png' },
+  { id: '13', name: 'Ridgeline', logo: '/ridgeline.png' },
+  { id: '14', name: 'Amberly', logo: '/amberly.png' },
+  { id: '15', name: 'Quorum', logo: '/quorum.png' },
 ];
 
 export const stats: Stat[] = [

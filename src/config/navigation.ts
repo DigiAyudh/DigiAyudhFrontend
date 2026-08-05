@@ -19,9 +19,9 @@ import {
   Settings,
   User,
   Bell,
-  KanbanSquare,
-  Calendar,
+Calendar,
   CheckCircle,
+  Trophy,
 } from 'lucide-react'
 import type { UserRole } from '../types'
 
@@ -64,7 +64,8 @@ const adminNav: NavSection[] = [
     items: [
       { label: 'Contact Requests', to: '/admin/contact-requests', icon: Inbox, badgeKey: 'contactRequests' },
       { label: 'Invoices', to: '/admin/invoices', icon: Receipt },
-      { label: 'Documents', to: '/admin/documents', icon: FileText },
+{ label: 'Documents', to: '/admin/documents', icon: FileText },
+      { label: 'Sport Tickets', to: '/admin/sport-tickets', icon: Trophy },
       { label: 'Audit Logs', to: '/admin/audit-logs', icon: ClipboardList },
     ],
   },
@@ -94,8 +95,8 @@ const employeeNav: NavSection[] = [
     title: 'Work',
     items: [
       { label: 'Projects', to: '/employee/projects', icon: FolderKanban },
-      { label: 'Task Board', to: '/employee/tasks', icon: KanbanSquare },
       { label: 'My Tasks', to: '/employee/my-tasks', icon: ListChecks },
+      { label: 'Sport Tickets', to: '/employee/sport-tickets', icon: Trophy },
       { label: 'Clients', to: '/employee/clients', icon: UserCheck },
       { label: 'Calendar', to: '/employee/calendar', icon: CalendarDays },
     ],
@@ -132,9 +133,10 @@ const clientNav: NavSection[] = [
       { label: 'Meetings', to: '/client/meetings', icon: CalendarDays },
     ],
   },
-  {
+{
     title: 'Support',
     items: [
+      { label: 'Sport Support', to: '/client/sport', icon: Trophy },
       { label: 'Support Tickets', to: '/client/support', icon: LifeBuoy },
       { label: 'Messages', to: '/client/messages', icon: MessageSquare },
     ],

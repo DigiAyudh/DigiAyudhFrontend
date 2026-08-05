@@ -1,21 +1,18 @@
-# Fix "meetings is not iterable" Render Error
-
-## Goal
-Fix `TypeError: meetings is not iterable` at `AdminMeetingsPage.tsx:181` caused by `meetings` in Redux state being `undefined` (backend response shape mismatch overwrites initial `[]`).
-
-## Status: COMPLETE
+# TODO: Sport Support for Admin/Employee + Remove Admin Sport Tokens
 
 ## Steps
+- [x] 1. Remove "Sport Tokens" (coin) from admin navigation (navigation.ts) + remove unused Coins import
+- [x] 2. Remove `/admin/sport-tokens` route and its import (App.tsx)
+- [x] 3. Create new client Sport Support page `/client/sport` (ClientSportPage.tsx)
+- [x] 4. Add "Sport Support" item to client navigation (navigation.ts)
+- [x] 5. Add `/client/sport` route (App.tsx)
+- [x] 6. Update ClientDashboard "Sport Support" section link to point to `/client/sport`
+- [x] 7. Verify build/typecheck (build passed successfully)
+- [x] 8. Write complete backend instructions in request.backend.md
+- [x] 9. Fix Sport ticket status display: add missing sport statuses (`not-picked-up`, `suspended`) to StatusBadge
 
-- [x] 1. `src/redux/slices/businessSlice.ts`: Add `extractArray<T>()` helper to safely unwrap arrays from various backend response shapes (`{ data: [...] }`, `{ meetings: [...] }`, `{ data: { meetings: [...] } }`, plain array, undefined → `[]`).
-- [x] 2. `src/redux/slices/businessSlice.ts`: Apply helper in `fetchMeetings` (fixes reported crash for AdminMeetingsPage + shared/MeetingsPage).
-- [x] 3. `src/redux/slices/businessSlice.ts`: Apply helper to `fetchInvoices`, `fetchDocuments`, `fetchAuditLogs`, `fetchAttendance` to prevent same crash class.
-- [x] 4. `src/redux/slices/businessSlice.ts`: Make `createMeeting`/`updateMeeting`/`deleteMeeting` reducers defensive (guard array before mutation).
-- [x] 5. `src/pages/admin/AdminMeetingsPage.tsx`: Guard sort with `Array.isArray(meetings) ? meetings : []`.
-- [x] 6. `src/pages/shared/MeetingsPage.tsx`: Same defensive guard.
-- [x] 7. Verify: `npm run build` — succeeded, `dist/` generated.
-- [x] 8. Verify: `npm run dev` — Meetings pages render without crash (state always an array now).
-
-## Note
-- `src/pages/admin/LeaveRequestsPage.tsx` line 55 TS error (`status` property) is pre-existing and unrelated to this fix.
-
+## Summary
+- Client "Sport Support" now creates **sport tickets** via the `/sport-tickets` API, which appear on **both** admin and employee dashboards.
+- "Sport Tokens" (coin) option removed from admin navigation and route.
+- Backend instructions written to `request.backend.md`.
+- Fixed sport ticket status badge rendering on the client side (missing statuses `not-picked-up` and `suspended` now display correctly).

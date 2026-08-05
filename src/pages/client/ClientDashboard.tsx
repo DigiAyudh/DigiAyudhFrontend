@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchDashboardStats } from '../../redux/slices/dashboardSlice'
 import { fetchProjects } from '../../redux/slices/projectsSlice'
 import { fetchInvoices, fetchMeetings } from '../../redux/slices/businessSlice'
+import { fetchSportTickets, fetchSportTokens } from '../../redux/slices/sportSlice'
 import { PageHeader } from '../../components/common/PageHeader'
 import { StatCard } from '../../components/common/StatCard'
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card'
@@ -111,6 +112,7 @@ export default function ClientDashboard() {
   const { stats, loading } = useAppSelector((s) => s.dashboard)
   const { projects } = useAppSelector((s) => s.projects)
   const { invoices, meetings } = useAppSelector((s) => s.business)
+  const { tickets: sportTickets, tokens: sportTokens } = useAppSelector((s) => s.sport)
   const { user } = useAppSelector((s) => s.auth)
 
   const [reviews, setReviews] = useState<ProjectReview[]>([])
@@ -143,14 +145,16 @@ export default function ClientDashboard() {
     }
   }
 
-  useEffect(() => {
+useEffect(() => {
     dispatch(fetchDashboardStats('client'))
     dispatch(fetchProjects())
     dispatch(fetchInvoices())
     dispatch(fetchMeetings())
+    dispatch(fetchSportTickets(user?._id))
+    dispatch(fetchSportTokens(user?._id))
     fetchReviews()
     fetchPortfolioProjects()
-  }, [dispatch])
+  }, [dispatch, user?._id])
 
   const handleSubmitReview = async () => {
     if (!selectedProject || !rating || !reviewText.trim()) {
@@ -387,6 +391,56 @@ export default function ClientDashboard() {
               ))}
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Sport Support Section */}
+      <Card className="mt-5">
+        <CardHeader className="flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+<Star className="h-5 w-5 text-primary" />
+            <CardTitle>Sport Support</CardTitle>
+          </div>
+          <Link to="/client/sport" className="flex items-center gap-1 text-sm text-primary hover:underline">
+            Open support <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-lg bg-muted p-4">
+              <p className="text-xs text-text-light">Token Balance</p>
+              <p className="mt-1 text-2xl font-bold">
+                {sportTokens.reduce((s, t) => s + t.balance, 0)}
+              </p>
+            </div>
+            <div className="rounded-lg bg-muted p-4">
+              <p className="text-xs text-text-light">Tokens Used</p>
+              <p className="mt-1 text-2xl font-bold">
+                {sportTokens.reduce((s, t) => s + t.used, 0)}
+              </p>
+            </div>
+            <div className="rounded-lg bg-muted p-4">
+              <p className="text-xs text-text-light">Open Tickets</p>
+              <p className="mt-1 text-2xl font-bold">
+                {sportTickets.filter((t) => t.status !== 'resolved' && t.status !== 'suspended').length}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            {sportTickets.slice(0, 4).map((t, idx) => (
+              <div key={t._id} className={`flex items-center justify-between gap-2 rounded-lg border border-border p-3 ${idx > 0 ? 'mt-2' : ''}`}>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{t.subject}</p>
+                  <p className="text-xs text-text-light">{t.projectName} · {formatDate(t.createdAt)}</p>
+                </div>
+                <StatusBadge status={t.status} />
+              </div>
+            ))}
+            {sportTickets.length === 0 && (
+              <p className="py-4 text-center text-sm text-text-light">No sport tickets yet.</p>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -27,6 +27,9 @@ const MAP: Record<string, 'default' | 'success' | 'warning' | 'destructive' | 'i
   new: 'info',
   responded: 'success',
   scheduled: 'info',
+  // sport tickets
+  'not-picked-up': 'warning',
+  suspended: 'destructive',
   // priority
   low: 'outline',
   medium: 'info',

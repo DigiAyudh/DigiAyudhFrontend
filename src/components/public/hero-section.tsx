@@ -21,7 +21,7 @@ export function HeroSection() {
       <div className="pointer-events-none absolute inset-0 bg-grid" />
       <div className="pointer-events-none absolute -top-40 left-1/2 size-[600px] -translate-x-1/2 rounded-full bg-purple-600/10 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-7xl pt-10 md:pt-0">
         <div className="mb-6 flex justify-center">
           {/* <motion.span
             initial={{ opacity: 0, y: 10 }}

@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Plus, LifeBuoy, Send } from 'lucide-react'
+import { Plus, LifeBuoy, Send, ImagePlus, X, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchTickets, createTicket, replyTicket } from '../../redux/slices/supportSlice'
+import { fetchProjects } from '../../redux/slices/projectsSlice'
+import apiClient from '../../services/api'
 import { PageHeader } from '../../components/common/PageHeader'
 import { Card, CardContent } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
@@ -30,10 +32,14 @@ type FormValues = z.infer<typeof schema>
 export default function SupportPage() {
   const dispatch = useAppDispatch()
   const { tickets, loading } = useAppSelector((s) => s.support)
+  const { projects } = useAppSelector((s) => s.projects)
   const { user } = useAppSelector((s) => s.auth)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<SupportTicket | null>(null)
   const [reply, setReply] = useState('')
+  const [projectId, setProjectId] = useState('')
+  const [screenshots, setScreenshots] = useState<string[]>([])
+  const [isUploading, setIsUploading] = useState(false)
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -42,16 +48,42 @@ export default function SupportPage() {
 
   useEffect(() => {
     dispatch(fetchTickets(undefined))
+    dispatch(fetchProjects())
   }, [dispatch])
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setIsUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('ownerId', user?._id || '')
+      const res = await apiClient.uploadDocument(formData)
+      const url = res.data?.url || res.data?.document?.url || res.data?.data?.url || ''
+      if (!url) throw new Error('No URL returned')
+      setScreenshots((prev) => [...prev, url])
+      toast.success('Screenshot uploaded')
+    } catch (error) {
+      toast.error(apiClient.getErrorMessage(error) || 'Failed to upload screenshot')
+    } finally {
+      setIsUploading(false)
+      e.target.value = ''
+    }
+  }
 
   const onSubmit = async (values: FormValues) => {
     await dispatch(createTicket({
       ...values,
+      projectId: projectId || undefined,
       createdBy: user?._id,
       createdByName: user?.name,
+      screenshots: screenshots.length ? screenshots : undefined,
     })).unwrap()
     toast.success('Ticket created')
     reset()
+    setProjectId('')
+    setScreenshots([])
     setOpen(false)
   }
 
@@ -77,10 +109,17 @@ export default function SupportPage() {
                 <FormField label="Subject" error={errors.subject?.message}>
                   <Input {...register('subject')} placeholder="Brief summary" />
                 </FormField>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <FormField label="Category" error={errors.category?.message}>
-                    <select {...register('category')} className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm">
-                      <option>General</option><option>Technical</option><option>Billing</option><option>Feature Request</option>
+<div className="mt-4 grid grid-cols-2 gap-3">
+                  <FormField label="Project" error={errors.category?.message}>
+                    <select
+                      value={projectId}
+                      onChange={(e) => setProjectId(e.target.value)}
+                      className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm"
+                    >
+                      <option value="">Select a project</option>
+                      {projects.map((p) => (
+                        <option key={p._id} value={p._id}>{p.title}</option>
+                      ))}
                     </select>
                   </FormField>
                   <FormField label="Priority" error={errors.priority?.message}>
@@ -90,9 +129,45 @@ export default function SupportPage() {
                   </FormField>
                 </div>
                 <div className="mt-4">
+                  <FormField label="Category" error={errors.category?.message}>
+                    <select {...register('category')} className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm">
+                      <option>General</option><option>Technical</option><option>Billing</option><option>Feature Request</option>
+                    </select>
+                  </FormField>
+                </div>
+                <div className="mt-4">
                   <FormField label="Description" error={errors.description?.message}>
                     <Textarea rows={4} {...register('description')} placeholder="Describe your issue..." />
                   </FormField>
+                </div>
+                {screenshots.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {screenshots.map((url, i) => (
+                      <div key={i} className="relative">
+                        <img src={url} alt={`screenshot-${i}`} className="h-16 w-16 rounded-lg border border-border object-cover" />
+                        <button
+                          type="button"
+                          className="absolute -right-1.5 -top-1.5 rounded-full bg-destructive p-0.5 text-white"
+                          onClick={() => setScreenshots((prev) => prev.filter((_, j) => j !== i))}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-4">
+                  <input type="file" accept="image/*" id="client-screenshot" className="hidden" onChange={handleFile} />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById('client-screenshot')?.click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+                    Add Screenshot
+                  </Button>
                 </div>
               </div>
               <DialogFooter>

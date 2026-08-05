@@ -103,6 +103,50 @@ export interface SupportTicket {
   updatedAt: Date
 }
 
+export type SportTicketStatus =
+  | 'not-picked-up'
+  | 'in-review'
+  | 'resolved'
+  | 'suspended'
+
+export interface SportTicketReply {
+  authorId: string
+  authorName: string
+  message: string
+  screenshots?: string[]
+  createdAt: Date
+}
+
+export interface SportTicket {
+  _id: string
+  subject: string
+  description: string
+  status: SportTicketStatus
+  priority: 'low' | 'medium' | 'high' | 'urgent'
+  category: string
+  clientId: string
+  clientName: string
+  projectId: string
+  projectName: string
+  createdBy: string
+  createdByName: string
+  assignedTo?: string
+  screenshots?: string[]
+  replies: SportTicketReply[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface SportToken {
+  _id: string
+  clientId: string
+  clientName: string
+  balance: number
+  totalGranted: number
+  used: number
+  updatedAt: Date
+}
+
 export interface AuditLog {
   _id: string
   actorId: string

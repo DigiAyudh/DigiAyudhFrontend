@@ -14,6 +14,7 @@ import supportReducer from './slices/supportSlice'
 import settingsReducer from './slices/settingsSlice'
 import attendanceReducer from './slices/attendanceSlice'
 import todoReducer from './slices/todoSlice'
+import sportReducer from './slices/sportSlice'
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     settings: settingsReducer,
     attendance: attendanceReducer,
     todos: todoReducer,
+    sport: sportReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
