@@ -11,6 +11,7 @@ import { navLinks } from '@/constants/landing.data';
 import { Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { tokenManager } from '@/utils/tokenManager';
+import { Logo } from '@/components/common/Logo';
 
 export function PublicNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -56,12 +57,8 @@ export function PublicNavbar() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg">
-            <img
-              src="/digiayudh-logo.jpeg"
-              alt="DigiAyudh Logo"
-              className="h-8 w-8 rounded-lg object-cover"
-            />
+<div className="flex size-8 items-center justify-center rounded-lg">
+            <Logo />
           </div>
           <span className="text-lg font-bold tracking-tight">{APP_CONFIG.name}</span>
         </Link>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { APP_CONFIG } from '../../config/navigation';
 import { footerLinks } from '@/constants/landing.data';
+import { Logo } from '@/components/common/Logo';
 
 export function PublicFooter() {
   return (
@@ -11,12 +12,8 @@ export function PublicFooter() {
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-lg">
-            <img
-              src="/digiayudh-logo.jpeg"
-              alt="DigiAyudh Logo"
-              className="h-8 w-8 rounded-lg object-cover"
-            />
+<div className="flex size-8 items-center justify-center rounded-lg">
+            <Logo />
           </div>
               <span className="text-lg font-bold">{APP_CONFIG.name}</span>
             </Link>
@@ -53,7 +50,7 @@ export function PublicFooter() {
             </ul>
           </div>
 
-          <div>
+<div>
             <h4 className="text-sm font-semibold">Resources</h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.resources.map((link) => (
@@ -63,6 +60,16 @@ export function PublicFooter() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

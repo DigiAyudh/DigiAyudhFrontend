@@ -13,6 +13,7 @@ import { APP_CONFIG } from '@/config/navigation';
 import { useAuth } from '@/contexts/auth.context';
 import type { ApiError } from '@/types';
 import { tokenManager } from '@/utils/tokenManager';
+import { Logo } from '@/components/common/Logo';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -99,12 +100,8 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="mb-10 text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/20">
-              <img
-                src="/digiayudh-logo.jpeg"
-                alt="DigiAyudh Logo"
-                className="h-8 w-8 rounded-lg object-cover"
-              />
+<div className="flex size-10 items-center justify-center rounded-lg ">
+              <Logo />
             </div>
           </Link>
           <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>

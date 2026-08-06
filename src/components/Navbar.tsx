@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { logout } from '../redux/slices/authSlice'
 import { Bell, LogOut, Settings, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { Logo } from './common/Logo'
 
 export default function Navbar() {
   const navigate = useNavigate()
@@ -29,7 +30,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <button onClick={() => navigate(getDashboardPath())} className="flex items-center gap-2 hover:opacity-80">
-            <img src="/digiayudh-logo.jpeg" alt="DigiAyudh" className="h-8 w-8" />
+<Logo alt="DigiAyudh" />
             <span className="font-bold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               DigiAyudh
             </span>

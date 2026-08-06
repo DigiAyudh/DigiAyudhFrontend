@@ -3,6 +3,7 @@ import { Layers, X } from 'lucide-react'
 import { navByRole } from '../../config/navigation'
 import { useAppSelector } from '../../redux/hooks'
 import { cn } from '../../lib/utils'
+import { Logo } from '../common/Logo'
 import type { UserRole } from '../../types'
 
 export function Sidebar({
@@ -48,11 +49,7 @@ export function Sidebar({
   to={`/${role}`}
   className="flex items-center gap-2"
 >
-  <img
-    src="/digiayudh-logo.jpeg"
-    alt="DigiAyudh Logo"
-    className="h-8 w-8 rounded-lg object-cover"
-  />
+<Logo />
 
   <span className="text-lg font-bold text-sidebar-foreground">
     DigiAyudh

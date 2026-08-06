@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import { Clock, ShieldCheck, XCircle, LogOut, Mail } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { logout } from '../redux/slices/authSlice'
+import { logout, fetchCurrentUser } from '../redux/slices/authSlice'
 import { Button } from '../components/ui/button'
 import { ThemeToggle } from '../components/common/ThemeToggle'
 
@@ -10,6 +12,31 @@ export default function PendingVerification() {
   const navigate = useNavigate()
   const { user } = useAppSelector((s) => s.auth)
   const rejected = user?.verificationStatus === 'rejected'
+
+  // Poll the backend so the user is redirected as soon as an admin
+  // verifies or rejects their account.
+  useEffect(() => {
+    const checkStatus = () => {
+      dispatch(fetchCurrentUser())
+        .unwrap()
+        .then((freshUser) => {
+          if (freshUser?.verificationStatus === 'verified') {
+            toast.success('Your account has been verified!')
+            navigate('/client', { replace: true })
+          } else if (freshUser?.verificationStatus === 'rejected') {
+            toast.error('Your account was not approved.')
+          }
+        })
+        .catch(() => {
+          // Ignore transient errors; keep polling.
+        })
+    }
+
+    checkStatus()
+    const interval = setInterval(checkStatus, 15000)
+
+    return () => clearInterval(interval)
+  }, [dispatch, navigate])
 
   const handleLogout = async () => {
     await dispatch(logout())

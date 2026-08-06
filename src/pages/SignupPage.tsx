@@ -6,8 +6,8 @@ import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-// import { clientSignup } from '../../../redux/slices/authSlice'
-import { sendEmailOtp } from '@/redux/slices/authSlice'
+import { clientSignup } from '@/redux/slices/authSlice'
+import { Logo } from '@/components/common/Logo'
 import {
   Card,
   CardContent,
@@ -87,30 +87,14 @@ export default function SignupPage() {
     },
   })
 
-  // const onSubmit = async (values: FormValues) => {
-  //   const result = await dispatch(clientSignup(values))
-  //   if (clientSignup.fulfilled.match(result)) {
-  //     toast.success('Account created! Your account is pending verification.')
-  //     navigate('/client')
-  //   } else {
-  //     toast.error((result.payload as string) || 'Signup failed')
-  //   }
-  // }
+const onSubmit = async (values: FormValues) => {
+    const result = await dispatch(clientSignup(values))
 
-  const onSubmit = async (values: FormValues) => {
-    const result = await dispatch(sendEmailOtp(values.email))
-
-    if (sendEmailOtp.fulfilled.match(result)) {
-      toast.success('Verification code sent to your email.')
-
-      navigate('/verify-email', {
-        state: {
-          email: values.email,
-          signupData: values,
-        },
-      })
+    if (clientSignup.fulfilled.match(result)) {
+      toast.success('Account created! Your account is pending verification.')
+      navigate('/pending-verification')
     } else {
-      toast.error((result.payload as string) || 'Failed to send OTP')
+      toast.error((result.payload as string) || 'Signup failed')
     }
   }
 
@@ -123,12 +107,8 @@ export default function SignupPage() {
       <div className="relative w-full max-w-2xl">
         <div className="mb-10 text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/20">
-              <img
-                src="/digiayudh-logo.jpeg"
-                alt="DigiAyudh Logo"
-                className="h-8 w-8 rounded-lg object-cover"
-              />
+<div className="flex size-10 items-center justify-center rounded-lg ">
+              <Logo />
             </div>
           </Link>
 
@@ -268,10 +248,16 @@ export default function SignupPage() {
           {...register('termsAccepted')}
         />
 
-        <span>
+<span>
           I agree to the{' '}
-          <span className="text-primary">Terms of Service</span> and{' '}
-          <span className="text-primary">Privacy Policy</span>.
+          <Link to="/terms" className="text-primary underline underline-offset-2 hover:text-primary/80">
+            Terms of Service
+          </Link>{' '}
+          and{' '}
+          <Link to="/privacy" className="text-primary underline underline-offset-2 hover:text-primary/80">
+            Privacy Policy
+          </Link>
+          .
         </span>
       </label>
 
