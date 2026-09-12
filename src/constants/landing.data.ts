@@ -7,19 +7,20 @@ import type {
   Service,
   Stat,
   Testimonial,
+  ClientReviewsSection as ClientReviewsSectionType,
 } from '@/types/domain.types';
 
 export const services: Service[] = [
- {
-  id: 'ai-automation',
-  title: 'AI Automation',
-  description:'Automate your business with AI-powered agents, smart workflows, customer support, lead management, and seamless integrations.',
-  icon: 'Bot',
-  features: ['AI Agents', 'WhatsApp, Email, CRM & Workflow Automation', '24/7 AI Support',
-  ],
-  badge: 'Trending ',
-  accent: 'amber',
-},
+  {
+    id: 'ai-automation',
+    title: 'AI Automation',
+    description: 'Automate your business with AI-powered agents, smart workflows, customer support, lead management, and seamless integrations.',
+    icon: 'Bot',
+    features: ['AI Agents', 'WhatsApp, Email, CRM & Workflow Automation', '24/7 AI Support',
+    ],
+    badge: 'Trending ',
+    accent: 'amber',
+  },
   {
     id: 'websites',
     title: 'Business Websites',
@@ -269,17 +270,129 @@ export const faqItems: FAQItem[] = [
   },
 ];
 
+// export const testimonial: Testimonial = {
+//   id: 'simran',
+//   quote:
+//     "DigiAyudh didn't just build our website. They understood the business, simplified the customer journey and gave us a digital system we can actually grow with.",
+//   author: 'Ayush Narware',
+//   role: 'Developer',
+//   company: 'DigiAyudh',
+//   avatar: 'AN',
+//   metric: '+92%',
+//   metricLabel: 'conversion rate after launch',
+// };
+
 export const testimonial: Testimonial = {
-  id: 'simran',
+  id: 'ayush',
   quote:
-    "DigiAyudh didn't just build our website. They understood the business, simplified the customer journey and gave us a digital system we can actually grow with.",
+    "At DigiAyudh, we believe technology should do more than solve problems—it should create new possibilities. We turn bold ideas into thoughtful, scalable digital products that help businesses move faster, work smarter, and build for what comes next.",
   author: 'Ayush Narware',
-  role: 'Developer',
+  role: 'Co-Founder',
   company: 'DigiAyudh',
   avatar: 'AN',
-  metric: '+92%',
-  metricLabel: 'conversion rate after launch',
+  metric: '63+',
+  metricLabel: 'digital products & solutions',
 };
+
+
+export const ClientReviewsSection: ClientReviewsSectionType[] = [{
+  id: 'client-1',
+  quote:
+    'DigiAyudh understood our business requirements and turned our ideas into a clean, reliable digital product. The entire process was smooth and professional.',
+  author: 'Rahul Sharma',
+  role: 'Founder & CEO',
+  company: 'Ananthaa Global Ventures',
+  avatar: 'RS',
+  metric: '5.0',
+  stats: '3',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-2',
+  quote:
+    'The team was highly responsive and transparent throughout the project. They understood what we needed, kept communication clear, and delivered a modern solution that genuinely improved our digital presence.',
+  author: 'Amit Verma',
+  role: 'Director',
+  company: 'Vertex',
+  avatar: 'AV',
+  metric: '4.8',
+  stats: '2',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-3',
+  quote:
+    'What stood out was their attention to detail. From the initial discussion to the final delivery, everything was handled professionally and the product turned out better than we expected.',
+  author: 'Neha Gupta',
+  role: 'Co-Founder',
+  company: 'Northstar Solutions',
+  avatar: 'NG',
+  metric: '4.9',
+  stats: '1',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-4',
+  quote:
+    'We needed a solution that was simple for our team to use but still looked professional. DigiAyudh delivered exactly that and was quick to respond whenever we had questions.',
+  author: 'Vikram Mehta',
+  role: 'Managing Director',
+  company: 'UrbanEdge',
+  avatar: 'VM',
+  metric: '4.7',
+  stats: '3',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-5',
+  quote:
+    'The development process was well organized and communication was consistent. They took our feedback seriously and made the necessary improvements without making the process complicated.',
+  author: 'Priya Malhotra',
+  role: 'Business Head',
+  company: 'Apex Ventures',
+  avatar: 'PM',
+  metric: '4.8',
+  stats: '2',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-6',
+  quote:
+    'DigiAyudh helped us move from an initial concept to a working digital product with a clear development process. The final result was fast, responsive, and easy to manage.',
+  author: 'Karan Patel',
+  role: 'Founder',
+  company: 'BrightCore',
+  avatar: 'KP',
+  metric: '4.6',
+  stats: '1',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+
+{
+  id: 'client-7',
+  quote:
+    'A reliable team with a good understanding of both design and technology. They were flexible with our requirements and delivered a solution that fit our business workflow really well.',
+  author: 'Rohan Kapoor',
+  role: 'Operations Director',
+  company: 'Meridian Group',
+  avatar: 'RK',
+  metric: '4.9',
+  stats: '1',
+  statsLabel: 'projects delivered',
+  metricLabel: 'client rating',
+},
+];
 
 // export const trustedClients: Client[] = [
 //   { id: '1', name: 'Northstar', logo: '◆' },
@@ -292,7 +405,7 @@ export const testimonial: Testimonial = {
 
 export const trustedClients: Client[] = [
 
-  
+
   { id: '1', name: 'Ananthaa Global Ventures', logo: '/agv_logo.png' },
   { id: '2', name: 'Vertex', logo: '/vertex.png' },
   { id: '3', name: 'Pulse', logo: '/pulse.png' },
@@ -311,8 +424,8 @@ export const trustedClients: Client[] = [
 ];
 
 export const stats: Stat[] = [
-  { label: 'client satisfaction', value: '98', suffix: '%' },
-  { label: 'products launched', value: '120', suffix: '+' },
+  { label: 'client satisfaction', value: '78', suffix: '%' },
+  { label: 'products launched', value: '63', suffix: '+' },
   { label: 'average ROI', value: '3.4', suffix: 'x' },
 ];
 

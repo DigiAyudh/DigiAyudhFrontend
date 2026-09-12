@@ -150,7 +150,7 @@ export function HeroSection() {
                   <span className="text-amber-400">★★★★★</span> 4.9
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Trusted by 120+ growing businesses
+                  Trusted by 63+ growing businesses
                 </p>
               </div>
             </motion.div>

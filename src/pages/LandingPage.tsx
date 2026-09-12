@@ -10,6 +10,7 @@ import { PortfolioSection } from '../components/public/portfolio-section';
 import { TestimonialSection } from '../components/public/testimonial-section';
 import { FAQSection } from '../components/public/faq-section';
 import { ContactSection } from '../components/public/contact-section';
+import { ClientReviewsSection } from '@/components/public/client-reviews-section';
 
 export default function HomePage() {
   return (
@@ -20,6 +21,7 @@ export default function HomePage() {
         <TrustedBySection />
         <ServicesSection />
         <PortfolioSection />
+        <ClientReviewsSection />
         {/* <PricingSection /> */}
         <WhyUsSection />
         <ProcessSection />

@@ -52,7 +52,7 @@ export function HeroDashboardMockup({ className }: { className?: string }) {
           </div>
           <div className="mx-auto flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1 text-xs text-slate-400">
             <span className="size-2 rounded-full bg-green-400" />
-            app.digiayudh.com
+            digiayudh.com
           </div>
         </div>
 
@@ -62,15 +62,21 @@ export function HeroDashboardMockup({ className }: { className?: string }) {
               <p className="text-xs text-slate-400">OVERVIEW</p>
               <p className="text-sm font-semibold text-white">{greeting} Ayudh User 👋</p>
             </div>
-            <button className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white">
+            {/* <button className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white">
               + New project
-            </button>
+            </button> */}
+          <a
+    href="#contact"
+    className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-purple-700"
+  >
+    + New project
+  </a>
           </div>
 
           {/* Metrics */}
           <div className="mb-4 grid grid-cols-3 gap-3">
             {[
-              { label: 'Revenue', value: '₹8.42L', change: '↗ 18.2%' },
+              { label: 'Revenue', value: '₹14.42L', change: '↗ 18.2%' },
               { label: 'Projects', value: '24', change: '↗ 4 new' },
               { label: 'Conversion', value: '32.8%', change: '↗ 6.4%' },
             ].map((m) => (
